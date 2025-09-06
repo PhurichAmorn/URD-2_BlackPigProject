@@ -60,7 +60,7 @@ def measure_object_length(pixel_length, mm_per_pixel):
 # Example usage
 # ================================
 
-image_path = "monkey.jpg"  # your image file
+image_path = "blackpig.jpg"  # your image file
 exif_data, img_size = get_exif_data(image_path)
 mm_per_pixel_subject, mm_per_pixel_sensor = get_pixel_size(exif_data, img_size)
 
