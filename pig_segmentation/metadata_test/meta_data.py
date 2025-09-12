@@ -35,6 +35,7 @@ def get_pixel_size(exif_data, img_size, sensor_width_mm=6.4):
 
     # If not in EXIF, ask user to specify (example: 1500mm = 1.5m)
     if not subject_distance:
+        print("No SubjectDistance in EXIF; using default of 1500mm.")
         subject_distance = 1500  # <-- Set your actual distance here in mm
 
     if not focal_length:
@@ -60,7 +61,7 @@ def measure_object_length(pixel_length, mm_per_pixel):
 # Example usage
 # ================================
 
-image_path = "blackpig.jpg"  # your image file
+image_path = "android.jpg"  # your image file
 exif_data, img_size = get_exif_data(image_path)
 mm_per_pixel_subject, mm_per_pixel_sensor = get_pixel_size(exif_data, img_size)
 

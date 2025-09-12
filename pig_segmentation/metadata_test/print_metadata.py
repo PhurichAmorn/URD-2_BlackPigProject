@@ -12,5 +12,5 @@ def print_exif(image_path):
             print(f"{tag}: {value}")
 
 if __name__ == "__main__":
-    image_path = "blackpig.jpg"  # Change to your image file path
+    image_path = "android.jpg"  # Change to your image file path
     print_exif(image_path)
