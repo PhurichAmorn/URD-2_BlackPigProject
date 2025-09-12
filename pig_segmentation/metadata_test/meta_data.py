@@ -65,7 +65,7 @@ exif_data, img_size = get_exif_data(image_path)
 mm_per_pixel_subject, mm_per_pixel_sensor = get_pixel_size(exif_data, img_size)
 
 # Example: Suppose segmentation/bounding box says object is 1200 px long
-pixel_length = 1200
+pixel_length = 146
 real_length_cm_subject = measure_object_length(pixel_length, mm_per_pixel_subject)
 real_length_cm_sensor = measure_object_length(pixel_length, mm_per_pixel_sensor)
 
