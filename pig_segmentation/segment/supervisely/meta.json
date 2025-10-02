@@ -1,0 +1,24 @@
+{
+    "classes": [
+        {
+            "title": "pig",
+            "description": "",
+            "shape": "bitmap",
+            "color": "#DB394C",
+            "geometry_config": {},
+            "id": 14084996,
+            "hotkey": ""
+        }
+    ],
+    "tags": [],
+    "projectType": "images",
+    "projectSettings": {
+        "multiView": {
+            "enabled": false,
+            "tagName": null,
+            "tagId": null,
+            "isSynced": false
+        },
+        "labelingInterface": "default"
+    }
+}
