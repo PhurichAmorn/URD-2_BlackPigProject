@@ -1,0 +1,57 @@
+{
+    "description": "",
+    "size": {
+        "height": 2647,
+        "width": 1520
+    },
+    "tags": [],
+    "objects": [
+        {
+            "classTitle": "pig",
+            "description": "",
+            "tags": [],
+            "bitmap": {
+                "origin": [
+                    327,
+                    84
+                ],
+                "data": "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"
+            },
+            "shape": "bitmap",
+            "geometryType": "bitmap",
+            "labelerLogin": "tthanas",
+            "updatedAt": "2025-10-03T10:07:22.384Z",
+            "createdAt": "2025-10-03T10:06:59.147Z",
+            "id": 1729042620,
+            "classId": 14084996,
+            "nnCreated": true,
+            "nnUpdated": false,
+            "smartToolInput": {
+                "crop": [
+                    [
+                        253.12933858624314,
+                        43.661168471417795
+                    ],
+                    [
+                        1113.288844119869,
+                        1589.900305476856
+                    ]
+                ],
+                "visible": true,
+                "negative": [
+                    [
+                        798.1433904582773,
+                        1484.7237998888377
+                    ]
+                ],
+                "positive": [
+                    [
+                        682.9924537745316,
+                        816.1256351337711
+                    ]
+                ]
+            }
+        }
+    ],
+    "customBigData": {}
+}
