@@ -1,0 +1,93 @@
+{
+    "description": "",
+    "size": {
+        "height": 768,
+        "width": 1408
+    },
+    "tags": [],
+    "objects": [
+        {
+            "classTitle": "pig",
+            "description": "",
+            "tags": [],
+            "bitmap": {
+                "origin": [
+                    337,
+                    230
+                ],
+                "data": "eJwB+gQF+4lQTkcNChoKAAAADUlIRFIAAAKwAAABOAEDAAAAmYFS3QAAAAZQTFRFAAAA////pdmf3QAAAAF0Uk5TAEDm2GYAAASiSURBVHic7d1LkpswFAVQujzoWbQEbSMzbSszsTSWwhI0ZEChRJiPJPMR0r1doYo3tNOnlfeRcRtwVQWhrLVDhQ5px6ix6uutoterJtYapPptl0CyemUNTn1Zy1iu8tkOpX7ZIFoQK0LWNZkYfrlWLlq5tgfR5qqvIzW/hvKE7fPYwxzMyb4cX2dqnvt9zuakQqWx9uKumaxe6omz9goiPcniCps+duoSa1Nrd1W145b850RN6NoDfTcSu3YzDhItC1i733K6jN1zC9WdBBdU7Gi5JRU7WK4sZm2zwapydmvqdDm7kd3yitmt7F7aFffic7csbwQXNaER7MYRioKwH70AUT+yAGkE+7FDYipm49YVKDYsmkSx4XIVjDWERnBBYht8f7nwegyy0UwxcFhv0mDT4GJtXYFk1/1GItm1xTSUnZOL7C+7di60Edb5lVi2p6R2qRlYnZOLZlsOazjswGGn5MLZlsN2HLbnsMOtWEtiGw7bctiOw/Yc1t6LbTis4bAdh+057MBhLYltOKzhsB2H7TnswGH/HTxT2OZhaSypZA/LZPXD3ottHtYdkFNYw5myh+Wx3cM+7A3Ze03Zvdj2OWx276UZKuntHo/VD3srtkd+Jv2wIVtT2H/7rWSwhsN2HLZ/WLcpCA4LPT2BzoI/miez4PMTpmCxdzr+IP3NveO89PJYdStWElhDYwWHZeyMPJaxMxr4mVtklvVxt74N687TULdhDf5sOzIrOCxhUzD4EyRdtPjTOcks62woDWfHc7cUh5Vwtq4o80Bix9Pt8GM2svgxI7FjbvFjNrL4eXizisNKNNswWcFh4fPQchr3zcIb11SUk3AnVnNYBWbfuYU37sQKDotu3Cm36MadroVCN+58iRWYnZKAbtyGw9YVYx6Wy8wklF0uihNQdk4tdh7WS+2gjetdK4tkvesNNZBtOWyzsgrIriqycf1rvAWO9S+aBjauf3EzcCM3HgucB58FzkPAahjb+qz639kgCZLDCg6Lm4fgWn/cPPwEixuzn2Bx0xuyGsWGN6lQHFbeioWNWcjC5qHjsOFqYfMQ3QWFxGoOKzmsALHRfXbWVhiKyhexq9UWbRDxXYGWJ+qyPEesWh8vmuSIFdPDQ+FsROxcs76wievt5Lq9oiQLMaveDzdB/a5HE7Hfy2KLXoPaiP3yfpnAseMSu7B+CFZ4+0Q+a2L25VVR4tjK29TyW+yT/R3XD8PG9SOw2cttD9ns5Z6wgsPmTsQJm5vcEzZ30z1jBYfNTO4Zm5mFU1Zw2LwsnLJ5LXbK5iX3nJUcNmsvP2ezXtESWMlhc1osgc3phRRWcNhguW3S6psU1uux91HEXrqX+iax3itl87n+NYx7Sqazy+rmt95qS53e38hkdhmJ+Z+Lo4TqZFZ6/0sXWxO9PFml34w7KsRGzczuz16IvcQWxkfNGggb16yFqFFyM+9JvxESn4HYxS02aF3Ydyu4gNfrHZqRWr91ayS7tC72y0YWFtkIXisYKPuiLHY5lmw5bINl53kAq9M8wL97R+M3BBeKUbF5Hmo0+84CXB3nDP9tSZXrXXjFxpD13jN/AfJkt8FuZjg3AAAAAElFTkSuQmCCOtB4oA=="
+            },
+            "shape": "bitmap",
+            "geometryType": "bitmap",
+            "labelerLogin": "tthanas",
+            "updatedAt": "2025-10-09T13:50:55.020Z",
+            "createdAt": "2025-10-09T13:50:18.121Z",
+            "id": 1731086383,
+            "classId": 14084996,
+            "nnCreated": true,
+            "nnUpdated": false,
+            "smartToolInput": {
+                "crop": [
+                    [
+                        337.2038149063934,
+                        149.00176616036728
+                    ],
+                    [
+                        1146.6421759095726,
+                        612.7813493465206
+                    ]
+                ],
+                "visible": true,
+                "negative": [
+                    [
+                        1090.690215471565,
+                        416.3277993641822
+                    ],
+                    [
+                        1054.6322854115153,
+                        478.496644295302
+                    ],
+                    [
+                        1045.9286471211587,
+                        397.6771458848463
+                    ],
+                    [
+                        1029.0027713716684,
+                        368.06794974789636
+                    ],
+                    [
+                        1075.0224838263662,
+                        296.8676399123259
+                    ],
+                    [
+                        851.1607547453973,
+                        563.6940461949971
+                    ]
+                ],
+                "positive": [
+                    [
+                        741,
+                        380
+                    ],
+                    [
+                        978.7862945955494,
+                        415.0844224655598
+                    ],
+                    [
+                        980.0296714941717,
+                        306.91063228541145
+                    ],
+                    [
+                        971.3260332038149,
+                        485.95690568703634
+                    ],
+                    [
+                        1008.6273401624867,
+                        315.6142705757683
+                    ]
+                ]
+            }
+        }
+    ],
+    "customBigData": {}
+}

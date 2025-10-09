@@ -1,0 +1,131 @@
+{
+    "description": "",
+    "size": {
+        "height": 1080,
+        "width": 1920
+    },
+    "tags": [],
+    "objects": [
+        {
+            "classTitle": "pig",
+            "description": "",
+            "tags": [],
+            "bitmap": {
+                "origin": [
+                    782,
+                    262
+                ],
+                "data": "eJwBTQWy+olQTkcNChoKAAAADUlIRFIAAAFKAAACKwEDAAAAs6dCJAAAAAZQTFRFAAAA////pdmf3QAAAAF0Uk5TAEDm2GYAAAT1SURBVHic7dy9jes4EABgGQ4UsgReCdcBW3rhCw4gsyvjWmEpLIGhA2N1WO+zLc1whkPxR/ZiFa4+2NL8kV4BmqY/h5+kx+kqp8u/QUyX6z9iuiyyz73R628xXUT3dr7RDwlVN7o46Ycuixd/qORi9R8quAKziK+ggNo7XQpoyNGHzMfgSXNXcFpRx9PzimYudl7RyFO9ohee2hXNhGBNMyFYSz635w0NHJ3lVG9o5OjmrvhobSQbrdNuygX2DKij6Qyop6mSUw1okNNIUwMokwMLKBPYRUxhBpiBDDPApKuAwmQxmcXUU1TJqUY0yGmkqEGUzCymZLosomS6MCVzgGUJdWmJCquM+mqKa5DMbIrGNMU1SGY2RYnMpiiRWZWgRLqS1CWprqS+lpoUDUfTmKS2kqbrJSVLaLK0Uv1ClFaqCYposgpTlV1G3dHU11FVTUMXGuuofiNqqmmqD4fSVHcPpalB8E7UVtPU0HpZ6t6bEvKHHk89pvaNqPmh9TRgqo+mqp7GUZTYPh5PEzsSYrM/jqZ/w9RSar4V0NTuqYDakbTPlqhgT5bavIylDlP9qtRjquSU6u4CGkZRahDEo+nhQyvR3RRN9WE9Hfd7wxDUd6EBU11PI6aqnibqpQFNlBZFE/VSQKlBkCgtkroaSrVsCfVyGo6m8WiKq5CkuAqp+VZCcRWSNFGFLah7PWop6o+moQuNNdQ0oLgNWlDcBt+C4pYdTHF3N6GuguoW1L8RDd+TRkjVYIrGy2iKBsELUzQzyK0mHgRtqJNT34WGLjQeTWHBFlByA4tLaziFBVtA6W0xKthG1I2g9La4F/WA2tE07KdmNI37qR5N4SB4ZQpnhhpN4XhhBmwBheOlD2WmZgV96VHo5TR0ofFoCpvLdqGGprC5dBeqaDqmZRs1l9tNuY7xI+jxfWib0AioaUIPXzohVU3omFWWoZ2WTreljVrWb2mn5rI0DfupkVNN07ifqia04BcyLNg2tOC3bMXC0WjEB3AFDIU5sE1owUYDBpahMLBaTlUb6raUG0V+SwvmC0fDlnJFEMF9taEwswXU0hQ2oqFpQb1AqpmLBVQx1O2mjZYuv5s2GhoFNAJqm9CC+XL4tqxiPSr4NyyTWfTcgKboYUABtTR1cuoBNV2opmkAVDWhEdCC5wZMERQ8DICUqZeC0kJPr2haU4WWpg5Q04R6QHUXquS0zzMxpl4gZYog7qdMEaCHuAXUkhQVLE1RwZoWFNV2AdVNqANUyenw572QMgULKVOFYT9lqnAQtSSNY6h5XYoGQRNaMDP6UDRevgctWeYPp+6HDqHmjaj+nlQl1YecXq2YXswi3RDI6X9RS6kS0485qgRN7Uiuc5iFNMipm8NZRq/T2Z9k9DKd3fRhBPR6WzEvs4Be/vr8+69Tfk8W4/0EpGhLFP6+n3CQGhip+4kZUQ3oRFMFg/q44Ry9MBSUVnycOOVoYCjIgX9SKCFF50nKvg11S9mXNW5p4OhJ/P1bGlk6ib9/u3I5nhphVKdNFebeMbsqAuadirfjtItmXkO6jlbM0We0gpz6HH0G1olp/tW9jxxkA/Bs75ilj8CGLH0E1ufpPVp5eQ9B/q4eNAjoLVrReAG9RcvPAvlV3E4iv6aGjJ7kdCqgRk61nCpZAXweqdWfOoRp/Tx0F6ok3fJ1nOV0KqBGTnUqXf8DKx01ypJ24HUAAAAASUVORK5CYILgdXtu"
+            },
+            "shape": "bitmap",
+            "geometryType": "bitmap",
+            "labelerLogin": "tthanas",
+            "updatedAt": "2025-10-08T03:45:50.516Z",
+            "createdAt": "2025-10-08T03:44:39.870Z",
+            "id": 1730230104,
+            "classId": 14084996,
+            "nnCreated": true,
+            "nnUpdated": false,
+            "smartToolInput": {
+                "crop": [
+                    [
+                        758.3149750739738,
+                        240.46039424862323
+                    ],
+                    [
+                        1113.802926105481,
+                        816.3877062001689
+                    ]
+                ],
+                "visible": true,
+                "negative": [
+                    [
+                        1018.2416489464737,
+                        795.3405286869895
+                    ],
+                    [
+                        1081.3120918714185,
+                        780.0334904955862
+                    ]
+                ],
+                "positive": [
+                    [
+                        935.6364907465972,
+                        527.8880446147383
+                    ]
+                ]
+            }
+        },
+        {
+            "classTitle": "pig",
+            "description": "",
+            "tags": [],
+            "bitmap": {
+                "origin": [
+                    1116,
+                    264
+                ],
+                "data": "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"
+            },
+            "shape": "bitmap",
+            "geometryType": "bitmap",
+            "labelerLogin": "tthanas",
+            "updatedAt": "2025-10-08T03:47:01.897Z",
+            "createdAt": "2025-10-08T03:46:10.041Z",
+            "id": 1730230139,
+            "classId": 14084996,
+            "nnCreated": true,
+            "nnUpdated": false,
+            "smartToolInput": {
+                "crop": [
+                    [
+                        1102.3355728464,
+                        230.8934953789963
+                    ],
+                    [
+                        1639.389950480021,
+                        810.6475668783926
+                    ]
+                ],
+                "visible": true,
+                "negative": [
+                    [
+                        1606.8991162459586,
+                        567.6483355898667
+                    ],
+                    [
+                        1213.1866543508486,
+                        248.11391334432494
+                    ],
+                    [
+                        1557.2072521232749,
+                        753.2461736606306
+                    ],
+                    [
+                        1551.4735754937344,
+                        711.1518186342719
+                    ],
+                    [
+                        1538.0949966914732,
+                        780.0334904955862
+                    ],
+                    [
+                        1540.0062222346533,
+                        613.5694501640763
+                    ],
+                    [
+                        1524.7164178892122,
+                        695.8447804428686
+                    ]
+                ],
+                "positive": [
+                    [
+                        1335.5050891143778,
+                        542.7743985288365
+                    ]
+                ]
+            }
+        }
+    ],
+    "customBigData": {}
+}
