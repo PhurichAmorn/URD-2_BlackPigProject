@@ -16,6 +16,7 @@ import numpy as np
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 
 def measure_pig_length_and_widths(binary_mask, frac_shift=0.1, window_frac=0.1, visualize=True):
     """
@@ -123,6 +124,7 @@ else:
     device = torch.device("cpu")
     print("Using CPU")
 
+print("Loading Model...")
 model = deeplabv3_resnet101(pretrained=False, num_classes=1, aux_loss=True) # add resnet101 backbone
 model.load_state_dict(torch.load('best_pig_segmentation_model.pth', map_location=device)) # load the weight
 
@@ -138,7 +140,8 @@ image_transforms = transforms.Compose([
 ])
 
 # load the image
-input_image_path = 'blackpig1crop.jpg'  # Your pig photo path
+print("Getting Image...")
+input_image_path = 'blackpig1crop.jpg' # blackpig1crop.jpg
 input_image = Image.open(input_image_path).convert("RGB")
 input_tensor = image_transforms(input_image).unsqueeze(0).to(device)
 
@@ -146,14 +149,20 @@ input_tensor = image_transforms(input_image).unsqueeze(0).to(device)
 with torch.no_grad():
     output = model(input_tensor)['out']
 
-# Get binary mask
-probabilities = torch.sigmoid(output)
-predicted_mask = (probabilities > 0.5).squeeze(0).squeeze(0).cpu().numpy()
+# Get probabilities (confidence map)
+probabilities = torch.sigmoid(output)  # values between 0 and 1
+confidence_map = probabilities.squeeze(0).squeeze(0).cpu().numpy()
 
-# Resize mask back to original image size
+# Binary mask using a threshold (e.g., 0.5)
+predicted_mask = (confidence_map > 0.5).astype(np.uint8)
+
+# Resize both mask and confidence map to original size
 original_size = input_image.size  # (width, height)
 mask_resized = Image.fromarray((predicted_mask * 255).astype(np.uint8)).resize(original_size, Image.NEAREST)
 mask_resized = np.array(mask_resized) / 255.0
+
+confidence_resized = Image.fromarray((confidence_map * 255).astype(np.uint8)).resize(original_size, Image.BILINEAR)
+confidence_resized = np.array(confidence_resized) / 255.0
 
 # Create masked pig image (pig only, transparent/white background)
 input_image_array = np.array(input_image)
@@ -179,28 +188,43 @@ print(f"Length: {measurements['length']:.2f} pixels")
 print(f"Width (Top): {measurements['width_top']:.2f} pixels")
 print(f"Width (Bottom): {measurements['width_bottom']:.2f} pixels")
 
-fig = plt.figure(figsize=(15, 12))
 
-ax1 = plt.subplot(2, 2, 1)
+fig = plt.figure(figsize=(14, 8))
+gs = gridspec.GridSpec(2, 3, figure=fig, wspace=0.15, hspace=0.25)
+
+ax1 = fig.add_subplot(gs[0, 0])
 ax1.imshow(input_image)
 ax1.set_title('Original Image')
 ax1.axis('off')
 
-ax2 = plt.subplot(2, 2, 2)
+ax2 = fig.add_subplot(gs[0, 1])
 ax2.imshow(mask_resized, cmap='gray')
 ax2.set_title('Predicted Mask')
 ax2.axis('off')
 
-ax3 = plt.subplot(2, 2, 3)
+ax3 = fig.add_subplot(gs[0, 2])
 ax3.imshow(masked_pig)
 ax3.set_title('Masked Pig (White Background)')
 ax3.axis('off')
 
-ax4 = plt.subplot(2, 2, 4)
+ax4 = fig.add_subplot(gs[1, 0])
 ax4.imshow(cv2.cvtColor(measurements['annotated_image'], cv2.COLOR_BGR2RGB))
-ax4.set_title(f"Measurements\nLength: {measurements['length']:.1f}px | Top: {measurements['width_top']:.1f}px | Bottom: {measurements['width_bottom']:.1f}px")
+ax4.set_title(f"Measurements\nLength: {measurements['length']:.1f}px | "
+              f"Top: {measurements['width_top']:.1f}px | "
+              f"Bottom: {measurements['width_bottom']:.1f}px")
 ax4.axis('off')
 
+ax5 = fig.add_subplot(gs[1, 1])
+im = ax5.imshow(confidence_resized, cmap='inferno')
+ax5.set_title('Confidence Map')
+ax5.axis('off')
+plt.colorbar(im, ax=ax5, fraction=0.046, pad=0.04, label='Confidence (0–1)')
+
+ax6 = fig.add_subplot(gs[1, 2])
+ax6.imshow(input_image)
+ax6.imshow(confidence_resized, cmap='jet', alpha=0.5)
+ax6.set_title('Confidence Overlay')
+ax6.axis('off')
 
 plt.tight_layout()
 plt.show()
