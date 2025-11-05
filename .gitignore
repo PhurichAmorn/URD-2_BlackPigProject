@@ -6,3 +6,9 @@ convert_mobile.py
 real.JPG
 real2.JPG
 best_pig_segmentation_model.pth
+blackpig1.jpg
+blackpig1crop.jpg
+blackpig2.jpeg
+pig.jpeg
+masked_pig_supervisely_white_bg.jpg
+masked_pig_supervisely.jpg
