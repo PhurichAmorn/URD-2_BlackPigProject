@@ -1,1 +1,8 @@
 sam_vit_h_4b8939.pth
+/measure_length/sam_b.pt
+/measure_length/yolov8n.pt
+.DS_Store
+convert_mobile.py
+real.JPG
+real2.JPG
+best_pig_segmentation_model.pth
