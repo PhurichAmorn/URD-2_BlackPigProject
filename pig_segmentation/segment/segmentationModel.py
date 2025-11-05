@@ -9,8 +9,7 @@ Date: 31 October 2025
 
 import torch
 from PIL import Image
-import matplotlib.pyplot as plt
-from torchvision import transforms, models
+from torchvision import transforms
 from torchvision.models.segmentation import deeplabv3_resnet101
 import numpy as np
 import cv2
@@ -140,8 +139,8 @@ image_transforms = transforms.Compose([
 ])
 
 # load the image
-print("Getting Image...")
-input_image_path = 'blackpig1crop.jpg' # blackpig1crop.jpg
+print("Loading an Image...")
+input_image_path = 'real2.jpg' # real.jpg
 input_image = Image.open(input_image_path).convert("RGB")
 input_tensor = image_transforms(input_image).unsqueeze(0).to(device)
 
@@ -153,8 +152,8 @@ with torch.no_grad():
 probabilities = torch.sigmoid(output)  # values between 0 and 1
 confidence_map = probabilities.squeeze(0).squeeze(0).cpu().numpy()
 
-# Binary mask using a threshold (e.g., 0.5)
-predicted_mask = (confidence_map > 0.5).astype(np.uint8)
+# Binary mask using a threshold
+predicted_mask = (confidence_map > 0.7).astype(np.uint8)
 
 # Resize both mask and confidence map to original size
 original_size = input_image.size  # (width, height)
@@ -173,8 +172,8 @@ masked_pig[mask_resized < 0.5] = [255, 255, 255]  # White background
 
 binary_mask_for_measurement = (mask_resized * 255).astype(np.uint8)
 
-# Measure pig dimensions
-print("Measuring pig dimensions...")
+# Measure pig dimensions (in pixels)
+print("Measuring pig dimensions (in pixels)...")
 measurements = measure_pig_length_and_widths(
     binary_mask_for_measurement,
     frac_shift=0.1,
