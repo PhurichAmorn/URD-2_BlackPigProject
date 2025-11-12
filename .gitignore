@@ -3,14 +3,6 @@ sam_vit_h_4b8939.pth
 /measure_length/yolov8n.pt
 .DS_Store
 convert_mobile.py
-real.JPG
-real2.JPG
+pig_segmentation/segment/checkpoints/depth_pro.pt
 best_pig_segmentation_model.pth
-blackpig1.jpg
-blackpig1crop.jpg
-blackpig2.jpeg
-pig.jpeg
-masked_pig_supervisely_white_bg.jpg
-masked_pig_supervisely.jpg
-real_image
 pig_segmentation/segment/saved_models/
