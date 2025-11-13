@@ -7,6 +7,15 @@ Author: Phurich Amornnara
 Date: 31 October 2025
 '''
 
+# ensure conda for depth-pro is installed to use depth-pro
+'''
+conda create -n depth-pro -y python=3.9
+conda activate depth-pro
+
+pip install -e .
+'''
+
+
 import exifread
 import torch
 from PIL import Image
@@ -141,7 +150,7 @@ image_transforms = transforms.Compose([
 
 # load the image
 print("Loading an Image...")
-input_image_path = 'real2.jpg' # real.jpg
+input_image_path = 'internet4.webp' # real.jpg
 input_image = Image.open(input_image_path).convert("RGB")
 input_tensor = image_transforms(input_image).unsqueeze(0).to(device)
 
@@ -183,7 +192,7 @@ measurements = measure_pig_length_and_widths(
 )
 
 # Print measurements
-print(f"\nPig Measurements:")
+print(f"\nPig Measurements in pixel:")
 print(f"Length: {measurements['length']:.2f} pixels")
 print(f"Width (Top): {measurements['width_top']:.2f} pixels")
 print(f"Width (Bottom): {measurements['width_bottom']:.2f} pixels")
@@ -228,7 +237,6 @@ ax6.axis('off')
 
 plt.tight_layout()
 plt.show()
-
 
 
 # Get image width
@@ -291,21 +299,23 @@ def calculate_object_size(pixel_length, image_width_pixels, sensor_width_mm, foc
 
 # Your data
 image_width_pixels = image_width # Image width in pixels or height
-focal_length_mm = focal_length
+image_height_pixels = image_height
+focal_length_mm = focal_length # Xiaomi note 14 = 5.24 or from image = focal_length
+
 ####################################### change this########################################
-sensor_width_mm = 5.76 # Example: Xiaomi Mi 10 sensor width or height in mm
-pixel_length = 595 # Measured length in pixels from the image
+sensor_width_mm = 7.68 # Example: Xiaomi Note 14 sensor width or height in mm
+sensor_height_mm = 5.76
+pixel_length = measurements['length'] # Measured length in pixels from the image
 
 # You need to know the distance to the object
-distance_mm = 600  # Example: 1000mm = 1 meter (you need to measure this!)
+distance_mm = 1000  # From depth prediction model
 
 object_size_mm = calculate_object_size(
     pixel_length=pixel_length,
-    image_width_pixels=image_width_pixels,
-    sensor_width_mm=sensor_width_mm,
+    image_width_pixels=image_height_pixels, # image_width_pixels=image_height_pixels or image_width_pixels=image_width_pixels
+    sensor_width_mm=sensor_height_mm,
     focal_length_mm=focal_length_mm,
     distance_mm=distance_mm
 )
 
 print(f"Real object size: {object_size_mm:.2f} mm ({object_size_mm/10:.2f} cm)")
-
