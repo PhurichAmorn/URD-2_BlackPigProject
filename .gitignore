@@ -13,3 +13,7 @@ pig.jpeg
 masked_pig_supervisely_white_bg.jpg
 masked_pig_supervisely.jpg
 segment_model.pth
+.venv/
+uv.lock
+pytorch_to_tflite.egg-info
+pyproject.toml
