@@ -1,18 +1,35 @@
+'''
+depth_test.py
+This program can used to check the depth of the image by using Depth-Pro from Apple ML
+Input an image and the window will popup where you can use the mouse to choose which 
+point you want to check.
+
+# Create an environment and install dependencies for depth pro first:
+conda create -n depth-pro -y python=3.9
+conda activate depth-pro
+
+pip install -e .
+source get_pretrained_models.sh   # Files will be downloaded to `checkpoints` directory.
+'''
+
 from PIL import Image
-import cv2
 import numpy as np
-from pathlib import Path
 import depth_pro
 import matplotlib.pyplot as plt
 import torch
-import os
 
-# --- Define checkpoint path ---
-checkpoint_path = Path(__file__).parent / "../pig_segmentation/segment/checkpoints/depth_pro.pt"
-checkpoint_path = checkpoint_path.resolve()
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using NVIDIA CUDA")
+elif torch.backends.mps.is_available():
+    device = torch.device("mps")
+    print("Using Apple Silicon")
+else:
+    device = torch.device("cpu")
+    print("Using CPU")
 
 # --- Load and resize image ---
-image_path = "../../images/height0.698m.jpg"  # 1.43 0.75
+image_path = "../../images/height0.838m.jpg"  # 1.43 0.75
 image_pil = Image.open(image_path).convert("RGB")
 image_pil.thumbnail((640, 640))
 image = np.array(image_pil)
@@ -22,25 +39,23 @@ image = np.array(image_pil)
 depth_model, transform = depth_pro.create_model_and_transforms()
 depth_model.eval()
 
-if torch.cuda.is_available():
-    depth_model = depth_model.cuda()
+depth_model = depth_model.to(device)
 
 image_rgb, _, f_px = depth_pro.load_rgb(image_path)
 depth_input = transform(image_rgb)
 
 if torch.cuda.is_available():
-    depth_input = {k: v.cuda() for k, v in depth_input.items()}
+    depth_input = depth_input.cuda()
 
 # Actual focal length in pixel from metadata
 # Formula focal length (px) = focal_length (mm) * image width or height / sensor width or height
 actual_fl_px =  2729# iphone 15 pm 5293.380822/3970 xiaomi = 2729.166667
 
 # convert to tensor (depth_pro.infer expects tensor/array with .squeeze())
-f_px_t = torch.tensor(actual_fl_px, dtype=torch.float32)
-if torch.cuda.is_available():
-    f_px_t = f_px_t.cuda()
+f_px_t = torch.tensor(actual_fl_px, dtype=torch.float32, device=device)
 
-prediction = depth_model.infer(depth_input, f_px=f_px_t)
+with torch.no_grad():
+    prediction = depth_model.infer(depth_input, f_px=f_px_t) # f_px change to actual focal length from metadata
 depth = prediction["depth"]
 depth_np = depth.squeeze().cpu().numpy()
 
@@ -80,11 +95,4 @@ def onclick(event):
 
 cid = fig.canvas.mpl_connect("button_press_event", onclick)
 
-# disconnect handler after window closes
-fig.canvas.mpl_disconnect(cid)
-
-plt.figure(figsize=(10, 8))
-plt.imshow(depth_np, cmap="plasma")
-plt.title("Depth Map (meters)")
-plt.colorbar(label="Depth (m)")
-plt.axis("off")
+plt.show()
