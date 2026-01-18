@@ -1,35 +1,22 @@
 from PIL import Image
 import cv2
 import numpy as np
-# from ultralytics import YOLO
 from pathlib import Path
 import depth_pro
 import matplotlib.pyplot as plt
 import torch
 import os
 
-# yolo_model = YOLO("yolo11s.pt")
+# --- Define checkpoint path ---
+checkpoint_path = Path(__file__).parent / "../pig_segmentation/segment/checkpoints/depth_pro.pt"
+checkpoint_path = checkpoint_path.resolve()
 
 # --- Load and resize image ---
-image_path = "../../../images/height0.838m.jpg" # 1.43 0.75
+image_path = "../../images/height0.698m.jpg"  # 1.43 0.75
 image_pil = Image.open(image_path).convert("RGB")
 image_pil.thumbnail((640, 640))
 image = np.array(image_pil)
 
-# # run yolo
-# results = yolo_model(image)
-
-# prediction_boxes = []
-# names = yolo_model.names
-
-# for result in results:
-#     annotated = result.plot()  # draw boxes and labels on image
-#     for box, cls in zip(result.boxes.xyxy, result.boxes.cls):
-#         if int(cls) == 19:  # 0 = human, 16 = dog, 19 = cow
-#             prediction_boxes.append(box.cpu().numpy())
-
-# yolo_output_path = "output/yolo_cow_predictions.jpg"
-# cv2.imwrite(yolo_output_path, cv2.cvtColor(annotated, cv2.COLOR_RGB2BGR))
 
 # Run depth pro
 depth_model, transform = depth_pro.create_model_and_transforms()
@@ -56,9 +43,6 @@ if torch.cuda.is_available():
 prediction = depth_model.infer(depth_input, f_px=f_px_t)
 depth = prediction["depth"]
 depth_np = depth.squeeze().cpu().numpy()
-
-depth_output_path = "output/depth_map.png"
-os.makedirs(os.path.dirname(depth_output_path), exist_ok=True)
 
 # Interactive plot: click to read depth at a pixel
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -96,11 +80,6 @@ def onclick(event):
 
 cid = fig.canvas.mpl_connect("button_press_event", onclick)
 
-# Save a static copy and show interactive window
-plt.savefig(depth_output_path, bbox_inches="tight")
-print(f"Depth map saved as: {depth_output_path}")
-plt.show()
-
 # disconnect handler after window closes
 fig.canvas.mpl_disconnect(cid)
 
@@ -109,21 +88,3 @@ plt.imshow(depth_np, cmap="plasma")
 plt.title("Depth Map (meters)")
 plt.colorbar(label="Depth (m)")
 plt.axis("off")
-plt.savefig(depth_output_path, bbox_inches="tight")
-
-
-# if not prediction_boxes:
-#     print("No object detected!")
-# else:
-#     for i, box in enumerate(prediction_boxes):
-#         x1, y1, x2, y2 = box.astype(int)
-#         region = depth_np[y1:y2, x1:x2]
-#         if region.size == 0:
-#             continue
-#         mean_depth = np.mean(region)
-#         min_depth = np.min(region)
-#         max_depth = np.max(region)
-#         print(f"Dog {i}: mean = {mean_depth:.2f} m, min = {min_depth:.2f} m, max = {max_depth:.2f} m")
-
-# print(f"YOLO prediction saved as: {yolo_output_path}")
-print(f"Depth map saved as: {depth_output_path}")
