@@ -20,3 +20,4 @@ pyproject.toml
 depth-estimation/checkpoints/depth_pro.pt
 pig_segmentation/segment/best_pig_segmentation_model_lastest.pth
 pig_segmentation/segment/best_model.pth
+pig_segmentation/segment/checkpoint_best_total.pth
