@@ -49,3 +49,4 @@ AGENTS.md
 .agent/
 SKILLS Mastery/
 output/
+app/assets/models/*.onnx
