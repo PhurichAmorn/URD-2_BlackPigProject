@@ -124,12 +124,6 @@ class PigDetector {
 
     final List<PigDetection> detections = [];
 
-    // Debug: print first detection's raw values to determine coordinate space
-    if (dets.isNotEmpty) {
-      print('DEBUG raw dets[0]: ${dets[0]}');
-      print('DEBUG originalSize: ${originalWidth}x$originalHeight, inputSize: $inputSize');
-    }
-
     // Determine if coords are normalized [0,1] or in input pixel space [0, inputSize]
     // Check if max values suggest pixel coords (>1) or normalized (<=1)
     bool isNormalized = true;
@@ -167,8 +161,6 @@ class PigDetector {
       final top = (cy - h / 2).clamp(0.0, originalHeight.toDouble());
       final right = (cx + w / 2).clamp(0.0, originalWidth.toDouble());
       final bottom = (cy + h / 2).clamp(0.0, originalHeight.toDouble());
-
-      print('DEBUG det[$i]: score=${score.toStringAsFixed(3)}, box=($left, $top, $right, $bottom)');
 
       // Parse mask for this detection if available
       List<List<double>>? mask;

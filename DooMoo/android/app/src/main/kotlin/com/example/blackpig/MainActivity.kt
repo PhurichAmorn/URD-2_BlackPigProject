@@ -25,8 +25,11 @@ class MainActivity: FlutterActivity() {
                         return@setMethodCallHandler
                     }
                     
-                    // Use the first available camera (usually back camera)
-                    val cameraId = cameraIds[0]
+                    // Use the back-facing camera
+                    val cameraId = cameraIds.firstOrNull { id ->
+                        cameraManager.getCameraCharacteristics(id)
+                            .get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_BACK
+                    } ?: cameraIds[0]
                     val characteristics = cameraManager.getCameraCharacteristics(cameraId)
                     
                     // Get focal length

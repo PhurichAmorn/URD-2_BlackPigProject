@@ -8,7 +8,7 @@ import 'package:blackpig/utils/responsive.dart';
 import 'package:blackpig/utils/camera_metadata.dart';
 import 'package:blackpig/models/detection_result.dart';
 
-class DetailsPage extends StatelessWidget {
+class DetailsPage extends StatefulWidget {
   final String? imagePath;
   final CameraMetadata? cameraMetadata;
   final DetectionResult? detectionResult;
@@ -21,24 +21,50 @@ class DetailsPage extends StatelessWidget {
   });
 
   @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  int? _selectedPigIndex;
+
+  void _onPigSelected(int index) {
+    setState(() {
+      _selectedPigIndex = index;
+    });
+  }
+
+  void _resetSelection() {
+    setState(() {
+      _selectedPigIndex = null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: detailsAppBar(context),
+      appBar: _detailsAppBar(context),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: ResponsiveUtils.height(context, 3)),
               PigImageWithOverlay(
-                imagePath: imagePath,
-                detectionResult: detectionResult,
+                imagePath: widget.imagePath,
+                detectionResult: widget.detectionResult,
+                selectedPigIndex: _selectedPigIndex,
+                onPigSelected: _onPigSelected,
               ),
               SizedBox(height: ResponsiveUtils.height(context, 4)),
-              PigInfo(detectionResult: detectionResult),
+              PigInfo(
+                detectionResult: widget.detectionResult,
+                selectedPigIndex: _selectedPigIndex,
+                onReset: _selectedPigIndex != null ? _resetSelection : null,
+                cameraMetadata: widget.cameraMetadata,
+              ),
               SizedBox(height: ResponsiveUtils.height(context, 3)),
-              CameraMetadataInfo(cameraMetadata: cameraMetadata),
+              CameraMetadataInfo(cameraMetadata: widget.cameraMetadata),
               SizedBox(height: ResponsiveUtils.height(context, 3)),
             ],
           ),
@@ -47,7 +73,7 @@ class DetailsPage extends StatelessWidget {
     );
   }
 
-  AppBar detailsAppBar(BuildContext context) {
+  AppBar _detailsAppBar(BuildContext context) {
     return AppBar(
       toolbarHeight: ResponsiveUtils.height(context, 10),
       backgroundColor: Color(0xFFFFFFFF),

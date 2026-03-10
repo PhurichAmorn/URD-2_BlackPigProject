@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:exif/exif.dart';
 import 'package:flutter/services.dart';
@@ -90,7 +91,7 @@ class CameraMetadataExtractor {
     // PRIMARY METHOD: Get image dimensions by decoding the actual image
     // This is the most reliable way and works on all devices
     try {
-      final codec = await ui.instantiateImageCodec(bytes as Uint8List);
+      final codec = await ui.instantiateImageCodec(Uint8List.fromList(bytes));
       final frame = await codec.getNextFrame();
       final decodedImage = frame.image;
       imageWidth = decodedImage.width;
@@ -219,15 +220,15 @@ class CameraMetadataExtractor {
 
     if (value is IfdTag) {
       final values = value.values.toList();
-      if (values.length >= 2) {
-        final numerator = values[0] as num;
-        final denominator = values[1] as num;
-        if (denominator != 0) {
-          return numerator / denominator;
+      if (values.isNotEmpty) {
+        // Rational values are Ratio objects with toString() = "num/denom"
+        final parts = values[0].toString().split('/');
+        if (parts.length == 2) {
+          final n = double.tryParse(parts[0]);
+          final d = double.tryParse(parts[1]);
+          if (n != null && d != null && d != 0) return n / d;
         }
-      } else if (values.isNotEmpty) {
-        // Single value
-        return (values[0] as num).toDouble();
+        return double.tryParse(values[0].toString());
       }
     } else if (value is num) {
       return value.toDouble();

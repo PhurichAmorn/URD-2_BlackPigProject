@@ -1,23 +1,54 @@
+# ── System ────────────────────────────────────────────────────────────────────
+.DS_Store
+
+# ── Python / ML ───────────────────────────────────────────────────────────────
+.venv/
+uv.lock
+pytorch_to_tflite.egg-info
+pyproject.toml
+convert_mobile.py
+
+# Model weights & checkpoints
+*.pth
+*.pt
 sam_vit_h_4b8939.pth
 /measure_length/sam_b.pt
 /measure_length/yolov8n.pt
-.DS_Store
-convert_mobile.py
 pig_segmentation/segment/checkpoints/depth_pro.pt
-best_pig_segmentation_model.pth
 pig_segmentation/segment/saved_models/
+pig_segmentation/segment/best_pig_segmentation_model_lastest.pth
+pig_segmentation/segment/best_model.pth
+pig_segmentation/segment/checkpoint_best_total.pth
+best_pig_segmentation_model.pth
+segment_model.pth
+depth-estimation/checkpoints/depth_pro.pt
+
+# Large dataset / image folders
+pig_segmentation/segment/supervisely/
+
+# Loose test images
 blackpig1.jpg
 blackpig1crop.jpg
 blackpig2.jpeg
 pig.jpeg
 masked_pig_supervisely_white_bg.jpg
 masked_pig_supervisely.jpg
-segment_model.pth
-.venv/
-uv.lock
-pytorch_to_tflite.egg-info
-pyproject.toml
-depth-estimation/checkpoints/depth_pro.pt
-pig_segmentation/segment/best_pig_segmentation_model_lastest.pth
-pig_segmentation/segment/best_model.pth
-pig_segmentation/segment/checkpoint_best_total.pth
+
+# ── Flutter / DooMoo ──────────────────────────────────────────────────────────
+# Build artifacts
+DooMoo/build/
+DooMoo/.dart_tool/
+DooMoo/.flutter-plugins
+DooMoo/.flutter-plugins-dependencies
+DooMoo/.pub-cache/
+DooMoo/.pub/
+
+# ONNX model files (large, distribute separately)
+DooMoo/assets/models/*.onnx
+DooMoo/output/
+
+# Flutter misc
+DooMoo/**/*.class
+DooMoo/**/*.log
+DooMoo/.idea/
+DooMoo/**/*.iml
