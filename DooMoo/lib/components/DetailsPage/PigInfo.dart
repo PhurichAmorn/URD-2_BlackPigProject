@@ -3,6 +3,7 @@ import 'package:blackpig/utils/responsive.dart';
 import 'package:blackpig/models/detection_result.dart';
 import 'package:blackpig/utils/camera_metadata.dart';
 import 'package:blackpig/utils/pig_measurements.dart';
+import 'package:blackpig/utils/config.dart';
 
 class PigInfo extends StatefulWidget {
   final DetectionResult? detectionResult;
@@ -213,14 +214,16 @@ class _PigInfoState extends State<PigInfo> {
             ),
           ],
         ),
-        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
-        Text(
-          'ความมั่นใจ: ${(det.confidence * 100).toStringAsFixed(1)}%',
-          style: TextStyle(
-            fontSize: ResponsiveUtils.fontSize(context, 28),
-            color: Color(0xFF5A5A5A),
+        if (AppConfig.debugMode) ...[
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          Text(
+            'ความมั่นใจ: ${(det.confidence * 100).toStringAsFixed(1)}%',
+            style: TextStyle(
+              fontSize: ResponsiveUtils.fontSize(context, 28),
+              color: Color(0xFF5A5A5A),
+            ),
           ),
-        ),
+        ],
         SizedBox(height: ResponsiveUtils.height(context, 2)),
         // Distance input
         _buildDistanceInput(context),
@@ -233,38 +236,40 @@ class _PigInfoState extends State<PigInfo> {
                 hipWidthMm: hipMm,
               )
             : '-'),
-        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
-        _buildField(
-          context,
-          'ความยาวลำตัว: ',
-          _distanceMm != null
-              ? _formatSize(lengthMm)
-              : '${lengthPx.toStringAsFixed(0)} px',
-        ),
-        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
-        _buildField(
-          context,
-          'รอบอก (Chest): ',
-          _distanceMm != null
-              ? _formatSize(chestMm)
-              : '${chestPx.toStringAsFixed(0)} px',
-        ),
-        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
-        _buildField(
-          context,
-          'ความกว้างท้อง (Abdominal): ',
-          _distanceMm != null
-              ? _formatSize(abdominalMm)
-              : '${abdominalPx.toStringAsFixed(0)} px',
-        ),
-        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
-        _buildField(
-          context,
-          'ความกว้างสะโพก (Hip): ',
-          _distanceMm != null
-              ? _formatSize(hipMm)
-              : '${hipPx.toStringAsFixed(0)} px',
-        ),
+        if (AppConfig.debugMode) ...[
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          _buildField(
+            context,
+            'ความยาวลำตัว: ',
+            _distanceMm != null
+                ? _formatSize(lengthMm)
+                : '${lengthPx.toStringAsFixed(0)} px',
+          ),
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          _buildField(
+            context,
+            'รอบอก (Chest): ',
+            _distanceMm != null
+                ? _formatSize(chestMm)
+                : '${chestPx.toStringAsFixed(0)} px',
+          ),
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          _buildField(
+            context,
+            'ความกว้างท้อง (Abdominal): ',
+            _distanceMm != null
+                ? _formatSize(abdominalMm)
+                : '${abdominalPx.toStringAsFixed(0)} px',
+          ),
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          _buildField(
+            context,
+            'ความกว้างสะโพก (Hip): ',
+            _distanceMm != null
+                ? _formatSize(hipMm)
+                : '${hipPx.toStringAsFixed(0)} px',
+          ),
+        ],
       ],
     );
   }

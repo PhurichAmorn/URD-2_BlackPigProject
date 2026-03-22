@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/phurich/Development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/phurich/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/phurich/Documents/CMKL/Fall_2025/URD2/URD-2_BlackPigProject/DooMoo/android/app/.cxx/RelWithDebInfo/494w5kc6/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/phurich/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/phurich/Documents/CMKL/Fall_2025/URD2/URD-2_BlackPigProject/DooMoo/android/app/.cxx/RelWithDebInfo/494w5kc6/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

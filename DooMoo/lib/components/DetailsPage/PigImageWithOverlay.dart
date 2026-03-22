@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:blackpig/models/detection_result.dart';
 import 'package:blackpig/utils/responsive.dart';
 import 'package:blackpig/utils/pig_measurements.dart';
+import 'package:blackpig/utils/config.dart';
 
 class PigImageWithOverlay extends StatefulWidget {
   final String? imagePath;
@@ -225,14 +226,17 @@ class DetectionOverlayPainter extends CustomPainter {
 
         if (det.mask != null) {
           _drawMask(canvas, det, scaleX, scaleY, color);
-          // Draw PCA measurement lines
-          final pca = PigMeasurements.fromMask(
-            det.mask!, det.boundingBox,
-            imageWidth: detectionResult.imageWidth,
-            imageHeight: detectionResult.imageHeight,
-          );
-          if (pca != null) {
-            _drawPcaLines(canvas, pca, scaleX, scaleY);
+          
+          if (AppConfig.debugMode) {
+            // Draw PCA measurement lines only in debug mode
+            final pca = PigMeasurements.fromMask(
+              det.mask!, det.boundingBox,
+              imageWidth: detectionResult.imageWidth,
+              imageHeight: detectionResult.imageHeight,
+            );
+            if (pca != null) {
+              _drawPcaLines(canvas, pca, scaleX, scaleY);
+            }
           }
         }
         _drawBbox(canvas, det, i, scaleX, scaleY, color, true);
@@ -263,29 +267,37 @@ class DetectionOverlayPainter extends CustomPainter {
     canvas.drawRect(scaledBox, boxPaint);
 
     // Draw label
-    final label = highlighted
-        ? 'หมู #${index + 1} · ${(det.confidence * 100).toStringAsFixed(0)}%'
-        : '${(det.confidence * 100).toStringAsFixed(0)}%';
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: label,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
+    String label;
+    if (AppConfig.debugMode) {
+      label = highlighted
+          ? 'หมู #${index + 1} · ${(det.confidence * 100).toStringAsFixed(0)}%'
+          : '${(det.confidence * 100).toStringAsFixed(0)}%';
+    } else {
+      label = highlighted ? 'หมู #${index + 1}' : '';
+    }
 
-    final bgRect = Rect.fromLTWH(
-      scaledBox.left,
-      scaledBox.top - textPainter.height - 4,
-      textPainter.width + 8,
-      textPainter.height + 4,
-    );
-    canvas.drawRect(bgRect, Paint()..color = color);
-    textPainter.paint(canvas, Offset(bgRect.left + 4, bgRect.top + 2));
+    if (label.isNotEmpty) {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: label,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      final bgRect = Rect.fromLTWH(
+        scaledBox.left,
+        scaledBox.top - textPainter.height - 4,
+        textPainter.width + 8,
+        textPainter.height + 4,
+      );
+      canvas.drawRect(bgRect, Paint()..color = color);
+      textPainter.paint(canvas, Offset(bgRect.left + 4, bgRect.top + 2));
+    }
   }
 
   void _drawMask(

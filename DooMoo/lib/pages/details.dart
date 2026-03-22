@@ -7,6 +7,7 @@ import 'package:blackpig/components/DetailsPage/PigImageWithOverlay.dart';
 import 'package:blackpig/utils/responsive.dart';
 import 'package:blackpig/utils/camera_metadata.dart';
 import 'package:blackpig/models/detection_result.dart';
+import 'package:blackpig/utils/config.dart';
 
 class DetailsPage extends StatefulWidget {
   final String? imagePath;
@@ -63,8 +64,10 @@ class _DetailsPageState extends State<DetailsPage> {
                 onReset: _selectedPigIndex != null ? _resetSelection : null,
                 cameraMetadata: widget.cameraMetadata,
               ),
-              SizedBox(height: ResponsiveUtils.height(context, 3)),
-              CameraMetadataInfo(cameraMetadata: widget.cameraMetadata),
+              if (AppConfig.debugMode) ...[
+                SizedBox(height: ResponsiveUtils.height(context, 3)),
+                CameraMetadataInfo(cameraMetadata: widget.cameraMetadata),
+              ],
               SizedBox(height: ResponsiveUtils.height(context, 3)),
             ],
           ),
@@ -83,12 +86,26 @@ class _DetailsPageState extends State<DetailsPage> {
       title: Padding(
         padding: EdgeInsets.only(right: ResponsiveUtils.width(context, 12)),
         child: Center(
-          child: Text(
-            'รายละเอียด',
-            style: TextStyle(
-              fontSize: ResponsiveUtils.fontSize(context, 43),
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF000000),
+          child: GestureDetector(
+            onLongPress: () {
+              setState(() {
+                AppConfig.debugMode = !AppConfig.debugMode;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      'Debug Mode: ${AppConfig.debugMode ? "Enabled" : "Disabled"}'),
+                  duration: const Duration(seconds: 1),
+                ),
+              );
+            },
+            child: Text(
+              'รายละเอียด',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, 43),
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000),
+              ),
             ),
           ),
         ),
