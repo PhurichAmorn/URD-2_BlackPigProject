@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:blackpig/models/detection_result.dart';
-import 'package:blackpig/utils/responsive.dart';
-import 'package:blackpig/utils/pig_measurements.dart';
-import 'package:blackpig/utils/config.dart';
+import 'package:DooMoo/models/detection_result.dart';
+import 'package:DooMoo/utils/responsive.dart';
+import 'package:DooMoo/utils/pig_measurements.dart';
+import 'package:DooMoo/utils/config.dart';
 
 class PigImageWithOverlay extends StatefulWidget {
   final String? imagePath;

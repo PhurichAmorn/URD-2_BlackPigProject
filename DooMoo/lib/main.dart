@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:blackpig/pages/home.dart';
-import 'package:blackpig/utils/camera_metadata.dart';
-import 'package:blackpig/services/pig_detector.dart';
+import 'package:DooMoo/pages/home.dart';
+import 'package:DooMoo/utils/camera_metadata.dart';
+import 'package:DooMoo/services/pig_detector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

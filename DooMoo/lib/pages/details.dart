@@ -1,13 +1,13 @@
-import 'package:blackpig/components/DetailsPage/PigInfo.dart';
-import 'package:blackpig/components/DetailsPage/CameraMetadataInfo.dart';
+import 'package:DooMoo/components/DetailsPage/PigInfo.dart';
+import 'package:DooMoo/components/DetailsPage/CameraMetadataInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:blackpig/pages/home.dart';
-import 'package:blackpig/components/DetailsPage/PigImageWithOverlay.dart';
-import 'package:blackpig/utils/responsive.dart';
-import 'package:blackpig/utils/camera_metadata.dart';
-import 'package:blackpig/models/detection_result.dart';
-import 'package:blackpig/utils/config.dart';
+import 'package:DooMoo/pages/home.dart';
+import 'package:DooMoo/components/DetailsPage/PigImageWithOverlay.dart';
+import 'package:DooMoo/utils/responsive.dart';
+import 'package:DooMoo/utils/camera_metadata.dart';
+import 'package:DooMoo/models/detection_result.dart';
+import 'package:DooMoo/utils/config.dart';
 
 class DetailsPage extends StatefulWidget {
   final String? imagePath;

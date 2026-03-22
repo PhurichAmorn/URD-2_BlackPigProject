@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:blackpig/utils/responsive.dart';
-import 'package:blackpig/models/detection_result.dart';
-import 'package:blackpig/utils/camera_metadata.dart';
-import 'package:blackpig/utils/pig_measurements.dart';
-import 'package:blackpig/utils/config.dart';
+import 'package:DooMoo/utils/responsive.dart';
+import 'package:DooMoo/models/detection_result.dart';
+import 'package:DooMoo/utils/camera_metadata.dart';
+import 'package:DooMoo/utils/pig_measurements.dart';
+import 'package:DooMoo/utils/config.dart';
 
 class PigInfo extends StatefulWidget {
   final DetectionResult? detectionResult;

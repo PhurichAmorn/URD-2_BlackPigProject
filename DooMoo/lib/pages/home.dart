@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:blackpig/components/HomePage/Camera.dart';
-import 'package:blackpig/components/HomePage/Upload.dart';
-import 'package:blackpig/utils/responsive.dart';
+import 'package:DooMoo/components/HomePage/Camera.dart';
+import 'package:DooMoo/components/HomePage/Upload.dart';
+import 'package:DooMoo/utils/responsive.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

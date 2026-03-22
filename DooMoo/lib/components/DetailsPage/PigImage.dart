@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:blackpig/utils/responsive.dart';
+import 'package:DooMoo/utils/responsive.dart';
 
 class PigImage extends StatefulWidget {
   final String? imagePath;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:blackpig/pages/camera.dart';
-import 'package:blackpig/utils/responsive.dart';
+import 'package:DooMoo/pages/camera.dart';
+import 'package:DooMoo/utils/responsive.dart';
 
 class Camera extends StatelessWidget {
   const Camera({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blackpig/utils/responsive.dart';
-import 'package:blackpig/utils/camera_metadata.dart';
+import 'package:DooMoo/utils/responsive.dart';
+import 'package:DooMoo/utils/camera_metadata.dart';
 
 class CameraMetadataInfo extends StatelessWidget {
   final CameraMetadata? cameraMetadata;

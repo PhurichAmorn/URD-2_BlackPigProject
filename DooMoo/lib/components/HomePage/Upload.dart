@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:blackpig/pages/details.dart';
-import 'package:blackpig/utils/responsive.dart';
-import 'package:blackpig/utils/camera_metadata.dart';
-import 'package:blackpig/services/pig_detector.dart';
+import 'package:DooMoo/pages/details.dart';
+import 'package:DooMoo/utils/responsive.dart';
+import 'package:DooMoo/utils/camera_metadata.dart';
+import 'package:DooMoo/services/pig_detector.dart';
 
 class Upload extends StatefulWidget {
   const Upload({super.key});
