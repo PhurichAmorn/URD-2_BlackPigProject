@@ -28,7 +28,7 @@ void main() {
       expect(result, '-');
     });
 
-    test('test_regression_model_calculates_correct_weight_for_valid_inputs', () {
+    test('when_inputs_are_valid_then_calculates_correct_weight', () {
       final bodyLength = 450.0;
       final chestWidth = 150.0;
       final abdominalWidth = 180.0;
