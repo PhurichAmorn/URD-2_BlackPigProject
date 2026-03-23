@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:DooMoo/utils/pig_math.dart';
 
 void main() {
-  group('test_regression_model_', () {
-    test('when_input_is_null_then_output_is_dash', () {
+  group('test regression model', () {
+    test('when input is null then output is dash', () {
       final bodyLength = 100.0;
       final chestWidth = 100.0;
       final abdominalWidth = 100.0;
@@ -20,7 +20,7 @@ void main() {
       expect(result4, '-');
     });
 
-    test('when_input_is_zero_then_output_is_dash', () {
+    test('when input is zero then output is dash', () {
       final zero = 0.0;
 
       final result = PigMath.estimateWeight(bodyLengthMm: zero, chestWidthMm: zero, abdominalWidthMm: zero, hipWidthMm: zero);
@@ -28,7 +28,7 @@ void main() {
       expect(result, '-');
     });
 
-    test('when_inputs_are_valid_then_calculates_correct_weight', () {
+    test('when inputs are valid then calculates correct weight', () {
       final bodyLength = 450.0;
       final chestWidth = 150.0;
       final abdominalWidth = 180.0;

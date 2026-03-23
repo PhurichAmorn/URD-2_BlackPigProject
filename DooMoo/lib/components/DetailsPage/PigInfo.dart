@@ -4,6 +4,7 @@ import 'package:DooMoo/models/detection_result.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
 import 'package:DooMoo/utils/pig_measurements.dart';
 import 'package:DooMoo/utils/config.dart';
+import 'package:DooMoo/utils/pig_math.dart';
 
 class PigInfo extends StatefulWidget {
   final DetectionResult? detectionResult;
@@ -34,57 +35,22 @@ class _PigInfoState extends State<PigInfo> {
   }
 
   /// Convert pixel length to real-world mm using camera metadata and distance.
-  /// PCA measurements are diagonal (not axis-aligned), so we use the average
-  /// of horizontal and vertical pixel sizes for conversion.
   double? _pixelToMm(double pixelLength) {
     final meta = widget.cameraMetadata;
-    if (_distanceMm == null || meta == null) return null;
-
-    final focalLength = meta.focalLength;
-    final sensorW = meta.sensorWidth;
-    final sensorH = meta.sensorHeight;
-    final imgW = meta.imageWidth;
-    final imgH = meta.imageHeight;
-
-    if (focalLength == null || focalLength <= 0) return null;
-    if (sensorW == null || sensorH == null || sensorW <= 0 || sensorH <= 0) return null;
-    if (imgW == null || imgH == null || imgW <= 0 || imgH <= 0) return null;
-
-    // Average pixel size since PCA axes are not aligned to image axes
-    final pixelSizeW = sensorW / imgW;
-    final pixelSizeH = sensorH / imgH;
-    final pixelSizeMm = (pixelSizeW + pixelSizeH) / 2;
-
-    final objectOnSensorMm = pixelLength * pixelSizeMm;
-    return (objectOnSensorMm * _distanceMm!) / focalLength;
+    return PigMath.pixelToMm(
+      pixelLength: pixelLength,
+      distanceMm: _distanceMm,
+      focalLength: meta?.focalLength,
+      sensorWidth: meta?.sensorWidth,
+      sensorHeight: meta?.sensorHeight,
+      imageWidth: meta?.imageWidth,
+      imageHeight: meta?.imageHeight,
+    );
   }
 
   String _formatSize(double? mm) {
     if (mm == null) return '-';
     return '${(mm / 10).toStringAsFixed(1)} cm';
-  }
-
-  /// Estimate weight using regression model:
-  /// Weight = -21.95431 + 0.31079(Body Length) + 0.43166(Chest Width)
-  ///        + 0.47990(Abdominal Width) + 0.42656(Hip Width)
-  /// All inputs in mm (converted to cm internally), output in kg.
-  String _estimateWeight({
-    required double? bodyLengthMm,
-    required double? chestWidthMm,
-    required double? abdominalWidthMm,
-    required double? hipWidthMm,
-  }) {
-    if (bodyLengthMm == null ||
-        chestWidthMm == null ||
-        abdominalWidthMm == null ||
-        hipWidthMm == null) return '-';
-    final weight = -21.95431
-        + 0.31079 * (bodyLengthMm / 10)
-        + 0.43166 * (chestWidthMm / 10)
-        + 0.47990 * (abdominalWidthMm / 10)
-        + 0.42656 * (hipWidthMm / 10);
-    if (weight < 0) return '-';
-    return '${weight.toStringAsFixed(1)} kg';
   }
 
   @override
@@ -229,7 +195,7 @@ class _PigInfoState extends State<PigInfo> {
         _buildDistanceInput(context),
         SizedBox(height: ResponsiveUtils.height(context, 2)),
         _buildField(context, 'น้ำหนัก: ', _distanceMm != null
-            ? _estimateWeight(
+            ? PigMath.estimateWeight(
                 bodyLengthMm: lengthMm,
                 chestWidthMm: chestMm,
                 abdominalWidthMm: abdominalMm,
