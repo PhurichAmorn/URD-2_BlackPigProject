@@ -79,8 +79,7 @@ class _PigInfoState extends State<PigInfo> {
           ],
         ),
         child: Padding(
-          padding:
-              ResponsiveUtils.responsivePadding(context, all: 32, top: 46),
+          padding: ResponsiveUtils.responsivePadding(context, all: 32, top: 46),
           child: hasDetections && widget.selectedPigIndex == null
               ? _buildSelectionPrompt(context)
               : hasDetections && widget.selectedPigIndex != null
@@ -125,7 +124,8 @@ class _PigInfoState extends State<PigInfo> {
     // otherwise fall back to bounding box
     final PigMeasurements? pca = det.mask != null
         ? PigMeasurements.fromMask(
-            det.mask!, box,
+            det.mask!,
+            box,
             imageWidth: widget.detectionResult!.imageWidth,
             imageHeight: widget.detectionResult!.imageHeight,
           )

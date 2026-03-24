@@ -138,8 +138,7 @@ class _PigImageWithOverlayState extends State<PigImageWithOverlay> {
                     child: LayoutBuilder(
                       builder: (context, constraints) {
                         return GestureDetector(
-                          onTapUp: (details) =>
-                              _onTapUp(details, constraints),
+                          onTapUp: (details) => _onTapUp(details, constraints),
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
@@ -226,11 +225,12 @@ class DetectionOverlayPainter extends CustomPainter {
 
         if (det.mask != null) {
           _drawMask(canvas, det, scaleX, scaleY, color);
-          
+
           if (AppConfig.debugMode) {
             // Draw PCA measurement lines only in debug mode
             final pca = PigMeasurements.fromMask(
-              det.mask!, det.boundingBox,
+              det.mask!,
+              det.boundingBox,
               imageWidth: detectionResult.imageWidth,
               imageHeight: detectionResult.imageHeight,
             );
@@ -386,12 +386,12 @@ class DetectionOverlayPainter extends CustomPainter {
     // Draw labels at endpoints to avoid overlap
     _drawLineLabel(canvas, scale(pca.lengthP2), 'Length',
         const Color(0xFFFF0000), const Offset(5, -5));
-    _drawLineLabel(canvas, scale(pca.topA), 'Chest',
-        const Color(0xFF0000FF), const Offset(-50, -5));
+    _drawLineLabel(canvas, scale(pca.topA), 'Chest', const Color(0xFF0000FF),
+        const Offset(-50, -5));
     _drawLineLabel(canvas, scale(pca.midA), 'Abdominal',
         const Color(0xFFFFFF00), const Offset(-65, -5));
-    _drawLineLabel(canvas, scale(pca.botA), 'Hip',
-        const Color(0xFFFF8800), const Offset(-35, -5));
+    _drawLineLabel(canvas, scale(pca.botA), 'Hip', const Color(0xFFFF8800),
+        const Offset(-35, -5));
   }
 
   void _drawLineLabel(

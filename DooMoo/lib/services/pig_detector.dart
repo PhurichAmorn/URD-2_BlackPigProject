@@ -57,7 +57,8 @@ class PigDetector {
   /// Run detection on an image file. Returns bounding boxes, confidence, and masks.
   Future<DetectionResult> detect(String imagePath) async {
     if (!_isReady || _session == null) {
-      throw StateError('PigDetector not initialized. Call getInstance() first.');
+      throw StateError(
+          'PigDetector not initialized. Call getInstance() first.');
     }
 
     // 1. Preprocess
@@ -138,7 +139,9 @@ class PigDetector {
     final double scaleToOrigX = originalWidth / inputSize;
     final double scaleToOrigY = originalHeight / inputSize;
 
-    for (int i = 0; i < numDetections && detections.length < _maxDetections; i++) {
+    for (int i = 0;
+        i < numDetections && detections.length < _maxDetections;
+        i++) {
       final score = scores[i];
       if (score < _confidenceThreshold) continue;
 
@@ -195,10 +198,16 @@ class PigDetector {
     }
 
     // Flat float array: reshape [1, N, 4]
-    if (raw is Float32List || (raw is List && raw.isNotEmpty && raw[0] is num)) {
-      final flat = raw is Float32List ? raw : Float32List.fromList((raw as List).cast<double>());
+    if (raw is Float32List ||
+        (raw is List && raw.isNotEmpty && raw[0] is num)) {
+      final flat = raw is Float32List
+          ? raw
+          : Float32List.fromList((raw as List).cast<double>());
       final n = flat.length ~/ 4;
-      return List.generate(n, (i) => [flat[i * 4], flat[i * 4 + 1], flat[i * 4 + 2], flat[i * 4 + 3]]);
+      return List.generate(
+          n,
+          (i) =>
+              [flat[i * 4], flat[i * 4 + 1], flat[i * 4 + 2], flat[i * 4 + 3]]);
     }
 
     return [];
@@ -224,8 +233,11 @@ class PigDetector {
       }).toList();
     }
 
-    if (raw is Float32List || (raw is List && raw.isNotEmpty && raw[0] is num)) {
-      final flat = raw is Float32List ? raw : Float32List.fromList((raw as List).cast<double>());
+    if (raw is Float32List ||
+        (raw is List && raw.isNotEmpty && raw[0] is num)) {
+      final flat = raw is Float32List
+          ? raw
+          : Float32List.fromList((raw as List).cast<double>());
       return flat.map((v) => _sigmoid(v)).toList();
     }
 

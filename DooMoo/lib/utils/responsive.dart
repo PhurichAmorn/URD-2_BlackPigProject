@@ -42,7 +42,8 @@ class ResponsiveUtils {
   }
 
   // Get responsive padding
-  static EdgeInsets responsivePadding(BuildContext context, {
+  static EdgeInsets responsivePadding(
+    BuildContext context, {
     double? left,
     double? top,
     double? right,

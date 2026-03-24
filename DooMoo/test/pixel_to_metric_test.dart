@@ -47,7 +47,7 @@ void main() {
 
       expect(resultZero, isNull);
     });
-    
+
     test('when distance is negative then returns null', () {
       final focalLength = 5.24;
       final sensorWidth = 7.68;
@@ -69,5 +69,5 @@ void main() {
 
       expect(resultNegative, isNull);
     });
-    });
-    }
+  });
+}
