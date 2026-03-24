@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
         builder: (context) => Transform.translate(
           offset: const Offset(15.0, 10.0),
           child: Text(
-            'Pig Scanner',
+            'DooMoo',
             style: TextStyle(
               fontSize: ResponsiveUtils.fontSize(context, 44),
               fontWeight: FontWeight.bold,

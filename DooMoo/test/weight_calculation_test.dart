@@ -36,8 +36,18 @@ void main() {
 
       final result = PigMath.estimateWeight(bodyLengthMm: bodyLength, chestWidthMm: chestWidth, abdominalWidthMm: abdominalWidth, hipWidthMm: hipWidth);
 
-      // Weight = -21.95431 + 0.31079*45 + 0.43166*15 + 0.47990*18 + 0.42656*16 = 13.9693 kg
       expect(result, '14.0 kg');
+    });
+
+    test('when inputs are not valid then output is dash', () {
+      final bodyLength = 450.0;
+      final chestWidth = 150.0;
+      final abdominalWidth = 1.0;
+      final hipWidth = 1.0;
+
+      final result = PigMath.estimateWeight(bodyLengthMm: bodyLength, chestWidthMm: chestWidth, abdominalWidthMm: abdominalWidth, hipWidthMm: hipWidth);
+
+      expect(result, '-');
     });
   });
 }

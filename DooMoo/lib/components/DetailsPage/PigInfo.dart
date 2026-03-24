@@ -27,6 +27,7 @@ class PigInfo extends StatefulWidget {
 class _PigInfoState extends State<PigInfo> {
   final TextEditingController _distanceController = TextEditingController();
   double? _distanceMm; // stored internally in mm
+  String? _errorText;
 
   @override
   void dispose() {
@@ -255,6 +256,7 @@ class _PigInfoState extends State<PigInfo> {
         ),
         SizedBox(height: ResponsiveUtils.height(context, 1)),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: TextField(
@@ -265,6 +267,11 @@ class _PigInfoState extends State<PigInfo> {
                   hintStyle: TextStyle(
                     fontSize: ResponsiveUtils.fontSize(context, 26),
                     color: Color(0xFFBBBBBB),
+                  ),
+                  errorText: _errorText,
+                  errorStyle: TextStyle(
+                    color: Colors.red,
+                    fontSize: ResponsiveUtils.fontSize(context, 22),
                   ),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12,
@@ -278,11 +285,18 @@ class _PigInfoState extends State<PigInfo> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(color: Color(0xFF2671F4)),
                   ),
-                  suffixText: 'm',
+                  suffixText: 'ม.',
                 ),
                 style: TextStyle(
                   fontSize: ResponsiveUtils.fontSize(context, 28),
                 ),
+                onChanged: (_) {
+                  if (_errorText != null) {
+                    setState(() {
+                      _errorText = null;
+                    });
+                  }
+                },
                 onSubmitted: (_) => _applyDistance(),
               ),
             ),
@@ -315,8 +329,14 @@ class _PigInfoState extends State<PigInfo> {
     if (value != null && value > 0) {
       setState(() {
         _distanceMm = value * 1000; // convert meters to mm
+        _errorText = null;
       });
       FocusScope.of(context).unfocus();
+    } else {
+      setState(() {
+        _errorText = 'ความสูงไม่ถูกต้อง';
+        _distanceMm = null;
+      });
     }
   }
 

@@ -29,7 +29,8 @@ class PigMath {
         sensorWidth <= 0 ||
         sensorHeight <= 0 ||
         imageWidth <= 0 ||
-        imageHeight <= 0) return null;
+        imageHeight <= 0 ||
+        distanceMm <= 0) return null;
 
     // Average pixel size since PCA axes are not aligned to image axes
     final pixelSizeW = sensorWidth / imageWidth;

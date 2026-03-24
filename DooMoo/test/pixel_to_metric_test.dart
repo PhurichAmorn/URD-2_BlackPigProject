@@ -26,16 +26,16 @@ void main() {
       expect(resultMm, closeTo(381.679, 0.001));
     });
 
-    test('when height is null then returns null', () {
+    test('when distance is zero or negative then returns null', () {
       final focalLength = 5.24;
       final sensorWidth = 7.68;
       final sensorHeight = 5.76;
       final imageWidth = 3000;
       final imageHeight = 4000;
-      final distanceMm = null;
       final pixelLength = 1000.0;
+      final distanceMm = 0.0;
 
-      final resultMm = PigMath.pixelToMm(
+      final resultZero = PigMath.pixelToMm(
         pixelLength: pixelLength,
         distanceMm: distanceMm,
         focalLength: focalLength,
@@ -45,9 +45,29 @@ void main() {
         imageHeight: imageHeight,
       );
 
-      expect(resultMm, isNull);
+      expect(resultZero, isNull);
     });
-
     
-  });
-}
+    test('when distance is negative then returns null', () {
+      final focalLength = 5.24;
+      final sensorWidth = 7.68;
+      final sensorHeight = 5.76;
+      final imageWidth = 3000;
+      final imageHeight = 4000;
+      final pixelLength = 1000.0;
+      final distanceMm = -1.0;
+
+      final resultNegative = PigMath.pixelToMm(
+        pixelLength: pixelLength,
+        distanceMm: distanceMm,
+        focalLength: focalLength,
+        sensorWidth: sensorWidth,
+        sensorHeight: sensorHeight,
+        imageWidth: imageWidth,
+        imageHeight: imageHeight,
+      );
+
+      expect(resultNegative, isNull);
+    });
+    });
+    }
