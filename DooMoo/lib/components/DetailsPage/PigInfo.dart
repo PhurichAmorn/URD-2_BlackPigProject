@@ -195,14 +195,19 @@ class _PigInfoState extends State<PigInfo> {
         // Distance input
         _buildDistanceInput(context),
         SizedBox(height: ResponsiveUtils.height(context, 2)),
-        _buildField(context, 'น้ำหนัก: ', _distanceMm != null
-            ? PigMath.estimateWeight(
-                bodyLengthMm: lengthMm,
-                chestWidthMm: chestMm,
-                abdominalWidthMm: abdominalMm,
-                hipWidthMm: hipMm,
-              )
-            : '-'),
+        _buildField(
+          context,
+          'น้ำหนัก: ',
+          _distanceMm != null
+              ? PigMath.estimateWeight(
+                  bodyLengthMm: lengthMm,
+                  chestWidthMm: chestMm,
+                  abdominalWidthMm: abdominalMm,
+                  hipWidthMm: hipMm,
+                )
+              : '-',
+          fontWeight: FontWeight.bold,
+        ),
         if (AppConfig.debugMode) ...[
           SizedBox(height: ResponsiveUtils.height(context, 1.5)),
           _buildField(
@@ -263,7 +268,7 @@ class _PigInfoState extends State<PigInfo> {
                 controller: _distanceController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
-                  hintText: 'เช่น 0.88',
+                  hintText: 'เช่น 0.67',
                   hintStyle: TextStyle(
                     fontSize: ResponsiveUtils.fontSize(context, 26),
                     color: Color(0xFFBBBBBB),
@@ -365,12 +370,14 @@ class _PigInfoState extends State<PigInfo> {
     );
   }
 
-  Widget _buildField(BuildContext context, String label, String value) {
+  Widget _buildField(BuildContext context, String label, String value,
+      {FontWeight fontWeight = FontWeight.normal}) {
     return Text(
       '$label$value',
       style: TextStyle(
         fontSize: ResponsiveUtils.fontSize(context, 35),
         color: Color(0xFF5A5A5A),
+        fontWeight: fontWeight,
       ),
     );
   }
