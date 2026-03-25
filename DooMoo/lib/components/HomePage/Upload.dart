@@ -4,10 +4,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:DooMoo/pages/details.dart';
 import 'package:DooMoo/utils/responsive.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
-import 'package:DooMoo/services/pig_detector.dart';
+import 'package:DooMoo/services/yolo_detector.dart';
+import 'package:DooMoo/models/detection_result.dart';
 
 class Upload extends StatefulWidget {
-  const Upload({super.key});
+  final ValueChanged<bool>? onProcessingChanged;
+  const Upload({super.key, this.onProcessingChanged});
 
   @override
   State<Upload> createState() => _UploadState();
@@ -15,6 +17,15 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload> {
   bool _isProcessing = false;
+
+  void _setProcessing(bool processing) {
+    if (mounted) {
+      setState(() {
+        _isProcessing = processing;
+      });
+      widget.onProcessingChanged?.call(processing);
+    }
+  }
 
   Future<void> _handleUpload() async {
     final picker = ImagePicker();
@@ -24,32 +35,48 @@ class _UploadState extends State<Upload> {
       imageQuality: 90,
     );
     if (xfile != null && mounted) {
-      setState(() => _isProcessing = true);
+      _setProcessing(true);
 
-      // Extract camera metadata from the uploaded image
-      final metadata =
-          await CameraMetadataExtractor.extractFromImage(xfile.path);
+      try {
+        // Extract camera metadata from the uploaded image
+        final metadata =
+            await CameraMetadataExtractor.extractFromImage(xfile.path);
 
-      // Run pig detection inference
-      final detector = await PigDetector.getInstance();
-      final detectionResult = await detector.detect(xfile.path);
+        // Run YOLO pig detection inference
+        final detector = await YoloDetector.getInstance();
+        final detections = await detector.detect(xfile.path);
 
-      // Debug: Print metadata (you can remove this later)
-      print('Camera Metadata: $metadata');
-      print('Detection Result: $detectionResult');
+        final detectionResult = DetectionResult(
+          detections: detections,
+          imageWidth: metadata.imageWidth ?? 0,
+          imageHeight: metadata.imageHeight ?? 0,
+        );
 
-      if (!mounted) return;
-      setState(() => _isProcessing = false);
+        // Debug: Print metadata (you can remove this later)
+        print('Camera Metadata: $metadata');
+        print('Detection Result: $detectionResult');
 
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => DetailsPage(
-            imagePath: xfile.path,
-            cameraMetadata: metadata,
-            detectionResult: detectionResult,
+        if (!mounted) return;
+        _setProcessing(false);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => DetailsPage(
+              imagePath: xfile.path,
+              cameraMetadata: metadata,
+              detectionResult: detectionResult,
+            ),
           ),
-        ),
-      );
+        );
+      } catch (e) {
+        print('Upload/Detection Error: $e');
+        if (mounted) {
+          _setProcessing(false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
+          );
+        }
+      }
     }
   }
 
@@ -123,14 +150,16 @@ class _UploadState extends State<Upload> {
     return Padding(
         padding: const EdgeInsets.only(top: 8),
         child: GestureDetector(
-          onTap: _handleUpload,
+          onTap: _isProcessing ? null : _handleUpload,
           child: Container(
             width: ResponsiveUtils.width(context, 60),
             height: ResponsiveUtils.height(context, 7),
             decoration: BoxDecoration(
                 color: Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Color(0xFF2671F4), width: 2),
+                border: Border.all(
+                    color: _isProcessing ? Colors.grey : Color(0xFF2671F4),
+                    width: 2),
                 boxShadow: [
                   BoxShadow(
                     color: Color.fromARGB(25, 0, 0, 0),
@@ -144,7 +173,7 @@ class _UploadState extends State<Upload> {
                 style: TextStyle(
                   fontSize: ResponsiveUtils.fontSize(context, 24),
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2671F4),
+                  color: _isProcessing ? Colors.grey : Color(0xFF2671F4),
                 ),
               ),
             ),

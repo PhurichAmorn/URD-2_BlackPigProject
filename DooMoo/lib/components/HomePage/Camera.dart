@@ -4,7 +4,8 @@ import 'package:DooMoo/pages/camera.dart';
 import 'package:DooMoo/utils/responsive.dart';
 
 class Camera extends StatelessWidget {
-  const Camera({super.key});
+  final bool isDisabled;
+  const Camera({super.key, this.isDisabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,13 @@ class Camera extends StatelessWidget {
               ],
             ),
           ),
+          if (isDisabled)
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
         ],
       ),
     );
@@ -44,15 +52,19 @@ class Camera extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 8),
         child: GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const CameraPage()));
-          },
+          onTap: isDisabled
+              ? null
+              : () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CameraPage()));
+                },
           child: Container(
             width: ResponsiveUtils.width(context, 60),
             height: ResponsiveUtils.height(context, 7),
             decoration: BoxDecoration(
-                color: Color(0xFF2671F4),
+                color: isDisabled ? Colors.grey : Color(0xFF2671F4),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -83,7 +95,7 @@ class Camera extends StatelessWidget {
         style: TextStyle(
           fontSize: ResponsiveUtils.fontSize(context, 34),
           fontWeight: FontWeight.bold,
-          color: Color(0xFF5A5A5A),
+          color: isDisabled ? Colors.grey : Color(0xFF5A5A5A),
         ),
       ),
     );
@@ -92,10 +104,13 @@ class Camera extends StatelessWidget {
   Padding cameraLogo(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 30),
-      child: SvgPicture.asset(
-        'assets/icons/Camera.svg',
-        width: ResponsiveUtils.width(context, 20),
-        height: ResponsiveUtils.width(context, 20),
+      child: Opacity(
+        opacity: isDisabled ? 0.5 : 1.0,
+        child: SvgPicture.asset(
+          'assets/icons/Camera.svg',
+          width: ResponsiveUtils.width(context, 20),
+          height: ResponsiveUtils.width(context, 20),
+        ),
       ),
     );
   }

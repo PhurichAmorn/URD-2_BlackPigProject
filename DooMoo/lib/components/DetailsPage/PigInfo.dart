@@ -128,6 +128,7 @@ class _PigInfoState extends State<PigInfo> {
             box,
             imageWidth: widget.detectionResult!.imageWidth,
             imageHeight: widget.detectionResult!.imageHeight,
+            maskRect: det.maskRect,
           )
         : null;
 

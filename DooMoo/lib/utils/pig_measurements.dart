@@ -42,6 +42,7 @@ class PigMeasurements {
     Rect boundingBox, {
     int? imageWidth,
     int? imageHeight,
+    Rect? maskRect,
     double fracShift = 0.15,
     double windowFrac = 0.15,
   }) {
@@ -50,13 +51,13 @@ class PigMeasurements {
     final int maskW = mask[0].length;
     if (maskW == 0) return null;
 
-    // 1. Find contour points (edge pixels of the binary mask)
     final List<double> pointsX = [];
     final List<double> pointsY = [];
 
-    // Mask covers the full image, not just the bounding box
+    // Use maskRect if provided, otherwise default to full image
     final double imgW = (imageWidth ?? maskW).toDouble();
     final double imgH = (imageHeight ?? maskH).toDouble();
+    final Rect activeRect = maskRect ?? Rect.fromLTWH(0, 0, imgW, imgH);
 
     for (int y = 0; y < maskH; y++) {
       for (int x = 0; x < maskW; x++) {
@@ -73,14 +74,15 @@ class PigMeasurements {
             mask[y][x + 1] <= 0.5);
 
         if (isEdge) {
-          // Scale to original image coordinates (mask covers full image)
-          final origX = (x / maskW) * imgW;
-          final origY = (y / maskH) * imgH;
-          // Only include points within the bounding box
-          if (origX >= boundingBox.left &&
-              origX <= boundingBox.right &&
-              origY >= boundingBox.top &&
-              origY <= boundingBox.bottom) {
+          // Scale to coordinates within the activeRect
+          final origX = activeRect.left + (x / maskW) * activeRect.width;
+          final origY = activeRect.top + (y / maskH) * activeRect.height;
+          
+          // Only include points within the bounding box (tighten the PCA to the specific pig)
+          if (origX >= boundingBox.left - 2 &&
+              origX <= boundingBox.right + 2 &&
+              origY >= boundingBox.top - 2 &&
+              origY <= boundingBox.bottom + 2) {
             pointsX.add(origX);
             pointsY.add(origY);
           }

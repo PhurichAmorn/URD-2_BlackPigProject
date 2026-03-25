@@ -233,6 +233,7 @@ class DetectionOverlayPainter extends CustomPainter {
               det.boundingBox,
               imageWidth: detectionResult.imageWidth,
               imageHeight: detectionResult.imageHeight,
+              maskRect: det.maskRect,
             );
             if (pca != null) {
               _drawPcaLines(canvas, pca, scaleX, scaleY);
@@ -313,8 +314,17 @@ class DetectionOverlayPainter extends CustomPainter {
     final maskH = mask.length;
     final maskW = mask[0].length;
 
-    final cellW = displayWidth / maskW;
-    final cellH = displayHeight / maskH;
+    // Use maskRect if available, otherwise assume full image
+    final Rect drawArea = det.maskRect ??
+        Rect.fromLTWH(0, 0, displayWidth / scaleX, displayHeight / scaleY);
+
+    final double scaledMaskLeft = drawArea.left * scaleX;
+    final double scaledMaskTop = drawArea.top * scaleY;
+    final double scaledMaskWidth = drawArea.width * scaleX;
+    final double scaledMaskHeight = drawArea.height * scaleY;
+
+    final cellW = scaledMaskWidth / maskW;
+    final cellH = scaledMaskHeight / maskH;
 
     // Clip mask rendering to the bounding box
     final scaledBox = Rect.fromLTRB(
@@ -333,8 +343,8 @@ class DetectionOverlayPainter extends CustomPainter {
         if (mask[y][x] > 0) {
           canvas.drawRect(
             Rect.fromLTWH(
-              x * cellW,
-              y * cellH,
+              scaledMaskLeft + x * cellW,
+              scaledMaskTop + y * cellH,
               cellW + 0.5,
               cellH + 0.5,
             ),

@@ -3,8 +3,21 @@ import 'package:DooMoo/components/HomePage/Camera.dart';
 import 'package:DooMoo/components/HomePage/Upload.dart';
 import 'package:DooMoo/utils/responsive.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool _isProcessing = false;
+
+  void _onProcessingChanged(bool processing) {
+    setState(() {
+      _isProcessing = processing;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +32,9 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: ResponsiveUtils.height(context, 7)),
-                Camera(),
+                Camera(isDisabled: _isProcessing),
                 SizedBox(height: ResponsiveUtils.height(context, 5)),
-                Upload(),
+                Upload(onProcessingChanged: _onProcessingChanged),
                 SizedBox(height: ResponsiveUtils.height(context, 5)),
               ],
             ),

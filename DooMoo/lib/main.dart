@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:DooMoo/pages/home.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
 import 'package:DooMoo/services/pig_detector.dart';
+import 'package:DooMoo/services/yolo_detector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,7 +10,8 @@ void main() async {
   // Initialize camera hardware metadata cache on first launch
   await CameraMetadataCache.initializeHardwareMetadata();
 
-  // Pre-load ONNX model in background (fire-and-forget)
+  // Pre-load ONNX models in background (fire-and-forget)
+  YoloDetector.getInstance();
   PigDetector.getInstance();
 
   runApp(const MyApp());

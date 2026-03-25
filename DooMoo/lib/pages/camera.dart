@@ -3,7 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:DooMoo/pages/details.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
-import 'package:DooMoo/services/pig_detector.dart';
+import 'package:DooMoo/services/yolo_detector.dart';
+import 'package:DooMoo/models/detection_result.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -15,6 +16,7 @@ class CameraPage extends StatefulWidget {
 class _CameraState extends State<CameraPage> {
   final ImagePicker _picker = ImagePicker();
   bool _isProcessing = false;
+  String _processingStatus = 'กำลังเตรียมการ...';
 
   @override
   void initState() {
@@ -32,24 +34,40 @@ class _CameraState extends State<CameraPage> {
       if (!mounted) return;
 
       if (xfile == null) {
-        // User cancelled - navigate back to HomePage
         Navigator.of(context).pop();
         return;
       }
 
-      setState(() => _isProcessing = true);
+      setState(() {
+        _isProcessing = true;
+        _processingStatus = 'กำลังตรวจหาหมู...';
+      });
 
-      // Extract camera metadata from the captured image
-      final metadata =
-          await CameraMetadataExtractor.extractFromImage(xfile.path);
+      // 1. Extract camera metadata
+      final metadata = await CameraMetadataExtractor.extractFromImage(xfile.path);
 
-      // Run pig detection inference
-      final detector = await PigDetector.getInstance();
-      final detectionResult = await detector.detect(xfile.path);
+      // 2. Run YOLOv8 for initial object detection
+      final yolo = await YoloDetector.getInstance();
+      final detections = await yolo.detect(xfile.path);
 
-      // Debug: Print metadata (you can remove this later)
-      print('Camera Metadata: $metadata');
-      print('Detection Result: $detectionResult');
+      if (detections.isEmpty) {
+        setState(() {
+          _isProcessing = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('ไม่พบหมูในภาพ')),
+          );
+          Navigator.of(context).pop();
+        }
+        return;
+      }
+
+      final detectionResult = DetectionResult(
+        detections: detections,
+        imageWidth: metadata.imageWidth ?? 0,
+        imageHeight: metadata.imageHeight ?? 0,
+      );
 
       if (!mounted) return;
 
@@ -65,9 +83,8 @@ class _CameraState extends State<CameraPage> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error opening camera: $e')),
+        SnackBar(content: Text('Error: $e')),
       );
-      // Navigate back to HomePage on error as well
       Navigator.of(context).pop();
     }
   }
@@ -121,9 +138,9 @@ class _CameraState extends State<CameraPage> {
                       const SizedBox(height: 20),
                       const CircularProgressIndicator(),
                       const SizedBox(height: 10),
-                      const Text(
-                        'กำลังวิเคราะห์...',
-                        style: TextStyle(
+                      Text(
+                        _processingStatus,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Color(0xFF5A5A5A),
                         ),
