@@ -77,7 +77,7 @@ class PigMeasurements {
           // Scale to coordinates within the activeRect
           final origX = activeRect.left + (x / maskW) * activeRect.width;
           final origY = activeRect.top + (y / maskH) * activeRect.height;
-          
+
           // Only include points within the bounding box (tighten the PCA to the specific pig)
           if (origX >= boundingBox.left - 2 &&
               origX <= boundingBox.right + 2 &&

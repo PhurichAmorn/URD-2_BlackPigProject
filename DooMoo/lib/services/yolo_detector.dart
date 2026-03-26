@@ -23,7 +23,7 @@ class YoloDetector {
 
   static Future<YoloDetector> getInstance() async {
     if (_instance != null && _instance!._isReady) return _instance!;
-    
+
     if (_initFuture != null) return _initFuture!;
 
     _initFuture = _initInstance();
@@ -74,8 +74,9 @@ class YoloDetector {
     final originalHeight = image.height;
 
     // Preprocess: Resize to 640x640 and normalize (NCHW)
-    final resized = img.copyResize(image, width: _inputSize, height: _inputSize);
-    
+    final resized =
+        img.copyResize(image, width: _inputSize, height: _inputSize);
+
     final channelSize = _inputSize * _inputSize;
     final inputData = Float32List(1 * 3 * channelSize);
     for (int y = 0; y < _inputSize; y++) {
@@ -119,7 +120,8 @@ class YoloDetector {
     return result;
   }
 
-  List<PigDetection> _postprocess(List<List<double>> output, int imgW, int imgH) {
+  List<PigDetection> _postprocess(
+      List<List<double>> output, int imgW, int imgH) {
     // output is [5, 8400]
     // rows: 0:cx, 1:cy, 2:w, 3:h, 4:score (for 1 class)
     List<PigDetection> candidates = [];
@@ -173,7 +175,8 @@ class YoloDetector {
     final intersection = a.intersect(b);
     if (intersection.width <= 0 || intersection.height <= 0) return 0.0;
     final intersectionArea = intersection.width * intersection.height;
-    final unionArea = a.width * a.height + b.width * b.height - intersectionArea;
+    final unionArea =
+        a.width * a.height + b.width * b.height - intersectionArea;
     return intersectionArea / unionArea;
   }
 

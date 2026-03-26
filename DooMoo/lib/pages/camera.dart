@@ -44,7 +44,8 @@ class _CameraState extends State<CameraPage> {
       });
 
       // 1. Extract camera metadata
-      final metadata = await CameraMetadataExtractor.extractFromImage(xfile.path);
+      final metadata =
+          await CameraMetadataExtractor.extractFromImage(xfile.path);
 
       // 2. Run YOLOv8 for initial object detection
       final yolo = await YoloDetector.getInstance();

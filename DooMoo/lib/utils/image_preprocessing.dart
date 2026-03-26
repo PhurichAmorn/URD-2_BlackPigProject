@@ -103,9 +103,12 @@ class ImagePreprocessor {
         final idx = y * size + x;
 
         // Normalize: (pixel / 255 - mean) / std
-        data[0 * channelSize + idx] = (pixel.r / 255.0 - _mean[0]) / _std[0]; // R
-        data[1 * channelSize + idx] = (pixel.g / 255.0 - _mean[1]) / _std[1]; // G
-        data[2 * channelSize + idx] = (pixel.b / 255.0 - _mean[2]) / _std[2]; // B
+        data[0 * channelSize + idx] =
+            (pixel.r / 255.0 - _mean[0]) / _std[0]; // R
+        data[1 * channelSize + idx] =
+            (pixel.g / 255.0 - _mean[1]) / _std[1]; // G
+        data[2 * channelSize + idx] =
+            (pixel.b / 255.0 - _mean[2]) / _std[2]; // B
       }
     }
     return data;

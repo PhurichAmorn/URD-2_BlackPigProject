@@ -53,31 +53,34 @@ class _DetailsPageState extends State<DetailsPage> {
 
       try {
         final rfDetr = await PigDetector.getInstance();
-        
+
         // Add padding to crop if possible to help RF-DETR
         final padding = det.boundingBox.width * 0.1;
         final imgW = _currentDetectionResult!.imageWidth.toDouble();
         final imgH = _currentDetectionResult!.imageHeight.toDouble();
-        
+
         final cropRect = Rect.fromLTRB(
-          (det.boundingBox.left - padding).clamp(0, imgW), 
+          (det.boundingBox.left - padding).clamp(0, imgW),
           (det.boundingBox.top - padding).clamp(0, imgH),
           (det.boundingBox.right + padding).clamp(0, imgW),
           (det.boundingBox.bottom + padding).clamp(0, imgH),
         );
 
-        final rfResult = await rfDetr.detect(widget.imagePath!, cropRect: cropRect);
-        
+        final rfResult =
+            await rfDetr.detect(widget.imagePath!, cropRect: cropRect);
+
         if (rfResult.detections.isNotEmpty && mounted) {
           final bestSeg = rfResult.detections.first;
-          final updatedDetections = List<PigDetection>.from(_currentDetectionResult!.detections);
+          final updatedDetections =
+              List<PigDetection>.from(_currentDetectionResult!.detections);
           updatedDetections[index] = det.copyWith(
             mask: bestSeg.mask,
             maskRect: bestSeg.maskRect,
           );
-          
+
           setState(() {
-            _currentDetectionResult = _currentDetectionResult!.copyWith(detections: updatedDetections);
+            _currentDetectionResult = _currentDetectionResult!
+                .copyWith(detections: updatedDetections);
           });
         }
       } catch (e) {

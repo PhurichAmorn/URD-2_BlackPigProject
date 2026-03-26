@@ -190,7 +190,9 @@ class PigDetector {
         confidence: score,
         classId: 0,
         mask: mask,
-        maskRect: cropRect ?? Rect.fromLTRB(0, 0, originalWidth.toDouble(), originalHeight.toDouble()),
+        maskRect: cropRect ??
+            Rect.fromLTRB(
+                0, 0, originalWidth.toDouble(), originalHeight.toDouble()),
       ));
     }
 
