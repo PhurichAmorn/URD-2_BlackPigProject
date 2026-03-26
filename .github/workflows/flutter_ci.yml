@@ -32,14 +32,5 @@ jobs:
       - name: Analyze code
         run: flutter analyze
 
-      # - name: Verify ONNX model exists
-      #   run: |
-      #     if [ -f "assets/models/rf_detr_pig.onnx" ]; then
-      #       echo "Model found."
-      #     else
-      #       echo "Error: rf_detr_pig.onnx is missing!"
-      #       exit 1
-      #     fi
-
       - name: Run unit tests
         run: flutter test --coverage
