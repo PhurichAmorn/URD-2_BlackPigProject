@@ -201,6 +201,27 @@ void main() {
 
     expect(resultMm, isNull);
   });
+    test('when sensor height is zero then returns null', () {
+    final focalLength = 5.24;
+    final sensorWidth = 7.68;
+    final sensorHeight = 0.0;
+    final imageWidth = 3000;
+    final imageHeight = 4000;
+    final distanceMm = 1000.0;
+    final pixelLength = 1000.0;
+
+    final resultMm = PigMath.pixelToMm(
+      pixelLength: pixelLength,
+      distanceMm: distanceMm,
+      focalLength: focalLength,
+      sensorWidth: sensorWidth,
+      sensorHeight: sensorHeight,
+      imageWidth: imageWidth,
+      imageHeight: imageHeight,
+    );
+
+    expect(resultMm, isNull);
+  });
 
     test('when distance is zero then returns null', () {
       final focalLength = 5.24;
@@ -245,5 +266,49 @@ void main() {
 
       expect(resultNegative, isNull);
     });
+
+    test('when focal length is negative then returns null', () {
+    final focalLength = -5.24;
+    final sensorWidth = 7.68;
+    final sensorHeight = 5.76;
+    final imageWidth = 3000;
+    final imageHeight = 4000;
+    final distanceMm = 1000.0;
+    final pixelLength = 1000.0;
+
+    final resultMm = PigMath.pixelToMm(
+      pixelLength: pixelLength,
+      distanceMm: distanceMm,
+      focalLength: focalLength,
+      sensorWidth: sensorWidth,
+      sensorHeight: sensorHeight,
+      imageWidth: imageWidth,
+      imageHeight: imageHeight,
+    );
+
+    expect(resultMm, isNull);
+  });
+
+    test('when multiple parameters are invalid then returns null', () {
+    final focalLength = 0.0;
+    final sensorWidth = 0.0;
+    final sensorHeight = 5.76;
+    final imageWidth = 0;
+    final imageHeight = 4000;
+    final distanceMm = -100.0;
+    final pixelLength = -50.0;
+
+    final resultMm = PigMath.pixelToMm(
+      pixelLength: pixelLength,
+      distanceMm: distanceMm,
+      focalLength: focalLength,
+      sensorWidth: sensorWidth,
+      sensorHeight: sensorHeight,
+      imageWidth: imageWidth,
+      imageHeight: imageHeight,
+    );
+
+    expect(resultMm, isNull);
+  });
   });
 }
