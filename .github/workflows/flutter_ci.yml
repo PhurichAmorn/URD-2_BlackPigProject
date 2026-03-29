@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Create dummy assets
+        run: |
+          mkdir -p assets/models
+          touch assets/models/rf_detr_pig.onnx
+          touch assets/models/yolov8_pig.onnx
+
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
