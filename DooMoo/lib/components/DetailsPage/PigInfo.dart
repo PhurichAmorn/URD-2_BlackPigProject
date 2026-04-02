@@ -5,6 +5,7 @@ import 'package:DooMoo/utils/camera_metadata.dart';
 import 'package:DooMoo/utils/pig_measurements.dart';
 import 'package:DooMoo/utils/config.dart';
 import 'package:DooMoo/utils/pig_math.dart';
+import 'package:DooMoo/services/depth_service.dart';
 
 class PigInfo extends StatefulWidget {
   final DetectionResult? detectionResult;
@@ -28,6 +29,7 @@ class _PigInfoState extends State<PigInfo> {
   final TextEditingController _distanceController = TextEditingController();
   double? _distanceMm; // stored internally in mm
   String? _errorText;
+  bool _isAutoEstimated = false;
 
   @override
   void dispose() {
@@ -252,14 +254,49 @@ class _PigInfoState extends State<PigInfo> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'ระยะห่างกล้องถึงหมู (เมตร):',
-          style: TextStyle(
-            fontSize: ResponsiveUtils.fontSize(context, 28),
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF5A5A5A),
-          ),
+        Row(
+          children: [
+            Text(
+              'ระยะห่างกล้องถึงหมู (เมตร):',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, 28),
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF5A5A5A),
+              ),
+            ),
+            SizedBox(width: 8),
+            // Auto-estimate button
+            GestureDetector(
+              onTap: _autoEstimateDistance,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Color(0xFFE8F0FE),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Color(0xFF2671F4), width: 1),
+                ),
+                child: Text(
+                  'ประมาณอัตโนมัติ',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.fontSize(context, 22),
+                    color: Color(0xFF2671F4),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
+        if (_isAutoEstimated)
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: Text(
+              '* ค่าประมาณจากขนาดหมูและข้อมูลกล้อง',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, 20),
+                color: Color(0xFFFF9800),
+              ),
+            ),
+          ),
         SizedBox(height: ResponsiveUtils.height(context, 1)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,9 +335,7 @@ class _PigInfoState extends State<PigInfo> {
                 ),
                 onChanged: (_) {
                   if (_errorText != null) {
-                    setState(() {
-                      _errorText = null;
-                    });
+                    setState(() => _errorText = null);
                   }
                 },
                 onSubmitted: (_) => _applyDistance(),
@@ -334,8 +369,9 @@ class _PigInfoState extends State<PigInfo> {
     final value = double.tryParse(_distanceController.text);
     if (value != null && value > 0) {
       setState(() {
-        _distanceMm = value * 1000; // convert meters to mm
+        _distanceMm = value * 1000;
         _errorText = null;
+        _isAutoEstimated = false;
       });
       FocusScope.of(context).unfocus();
     } else {
@@ -344,6 +380,53 @@ class _PigInfoState extends State<PigInfo> {
         _distanceMm = null;
       });
     }
+  }
+
+  /// Compute pig body length in pixels from the currently selected detection.
+  double? _getPigLengthPx() {
+    final idx = widget.selectedPigIndex;
+    final result = widget.detectionResult;
+    if (idx == null || result == null) return null;
+
+    final det = result.detections[idx];
+    final pca = det.mask != null
+        ? PigMeasurements.fromMask(
+            det.mask!,
+            det.boundingBox,
+            imageWidth: result.imageWidth,
+            imageHeight: result.imageHeight,
+            maskRect: det.maskRect,
+          )
+        : null;
+
+    return pca?.length ?? det.boundingBox.width;
+  }
+
+  void _autoEstimateDistance() {
+    final lengthPx = _getPigLengthPx();
+    if (lengthPx == null) {
+      setState(() => _errorText = 'ไม่พบข้อมูลการตรวจจับ');
+      return;
+    }
+
+    final result = DepthService.estimateGeometric(
+      pixelPigLength: lengthPx,
+      cameraMetadata: widget.cameraMetadata,
+    );
+
+    if (result == null) {
+      setState(() => _errorText = 'ไม่มีข้อมูลกล้อง กรุณาใส่ระยะด้วยตนเอง');
+      return;
+    }
+
+    final distanceM = result.distanceMeters;
+    setState(() {
+      _distanceMm = distanceM * 1000;
+      _distanceController.text = distanceM.toStringAsFixed(2);
+      _errorText = null;
+      _isAutoEstimated = true;
+    });
+    FocusScope.of(context).unfocus();
   }
 
   /// No detections found
