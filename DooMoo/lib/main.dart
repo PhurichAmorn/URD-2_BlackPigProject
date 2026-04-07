@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:DooMoo/pages/home.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
 import 'package:DooMoo/services/pig_detector.dart';
@@ -6,6 +7,11 @@ import 'package:DooMoo/services/yolo_detector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait only
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   // Initialize camera hardware metadata cache on first launch
   await CameraMetadataCache.initializeHardwareMetadata();

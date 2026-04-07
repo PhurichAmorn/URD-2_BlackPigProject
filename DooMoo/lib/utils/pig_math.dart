@@ -1,4 +1,43 @@
 class PigMath {
+  /// Average pig body length (snout → tail base) in mm.
+  static const double averagePigLengthMm = 439.0;
+
+  /// Average pig chest width in mm.
+  static const double averagePigChestMm = 151.0;
+
+  /// Estimate height (distance) from camera to pig using the pinhole model.
+  /// Formula: height = (real_size × focal_length_px) / pixel_size
+  static double? estimateHeightGeometric({
+    required double? pixelSize,
+    required double? focalLength,
+    required double? sensorWidth,
+    required double? sensorHeight,
+    required int? imageWidth,
+    required int? imageHeight,
+    required double realSizeMm,
+  }) {
+    if (pixelSize == null ||
+        focalLength == null ||
+        sensorWidth == null ||
+        sensorHeight == null ||
+        imageWidth == null ||
+        imageHeight == null ||
+        pixelSize <= 0 ||
+        focalLength <= 0 ||
+        sensorWidth <= 0 ||
+        sensorHeight <= 0 ||
+        imageWidth <= 0 ||
+        imageHeight <= 0) return null;
+
+    // Convert focal length from mm to pixels using sensor size.
+    final focalPxH = (focalLength / sensorWidth) * imageWidth;
+    final focalPxV = (focalLength / sensorHeight) * imageHeight;
+    final focalPx = (focalPxH + focalPxV) / 2;
+
+    // Pinhole camera formula: distance = (real_size * focal_px) / pixel_size
+    return (realSizeMm * focalPx) / pixelSize;
+  }
+
   /// Convert pixel length to real-world mm using camera metadata and distance.
   ///
   /// [pixelLength] the length in pixels
