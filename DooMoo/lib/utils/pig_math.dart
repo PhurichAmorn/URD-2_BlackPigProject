@@ -60,6 +60,11 @@ class PigMath {
         0.43166 * (chestWidthMm / 10) +
         0.47990 * (abdominalWidthMm / 10) +
         0.42656 * (hipWidthMm / 10);
+    // final weight = -12.06458 +
+    //     0.22849 * (bodyLengthMm / 10) +
+    //     0.64204 * (chestWidthMm / 10) +
+    //     0 * (abdominalWidthMm / 10) +
+    //     0.33413 * (hipWidthMm / 10);
     if (weight < 0) return '-';
     return '${weight.toStringAsFixed(1)} kg';
   }
