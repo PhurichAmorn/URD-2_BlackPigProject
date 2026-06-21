@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**DooMoo** (BlackPig) is a Flutter mobile application for capturing and analyzing pig images. It runs on-device RF-DETR pig detection (ONNX), extracts camera metadata (EXIF + native hardware info), converts pixel measurements to real-world sizes, and estimates pig weight using a regression model. The app targets Android and iOS primarily.
+**DooMoo** (BlackPig) is a Flutter mobile application for capturing and analyzing pig images. It runs on-device YOLOv8 pig detection + RF-DETR segmentation (both ONNX), extracts camera metadata (EXIF + native hardware info), converts pixel measurements to real-world sizes, and estimates pig weight using a regression model. The app targets Android and iOS primarily.
 
 ## Common Commands
 
@@ -46,24 +46,33 @@ MyApp
     └── Upload button → image_picker → DetailsPage
 ```
 
-`CameraPage` uses `image_picker` to capture a photo, then extracts `CameraMetadata` and runs RF-DETR detection before navigating to `DetailsPage`. The Upload path skips `CameraPage` and calls the metadata extractor + detector directly on the picked file.
+`CameraPage` uses `image_picker` to capture a photo, then extracts `CameraMetadata` and runs YOLOv8 detection before navigating to `DetailsPage`. RF-DETR segmentation runs lazily on `DetailsPage` when the user taps a detected pig. The Upload path skips `CameraPage` and calls the metadata extractor + YOLO detector directly on the picked file.
 
 ### Key Directories
 
 - `lib/pages/` — Full-screen routes: `home.dart`, `camera.dart`, `details.dart`
 - `lib/components/` — Widget components scoped by page (`HomePage/`, `DetailsPage/`)
-- `lib/services/` — `pig_detector.dart` (ONNX RF-DETR inference)
+- `lib/services/` — `yolo_detector.dart` (YOLOv8 ONNX detection), `pig_detector.dart` (RF-DETR ONNX segmentation)
 - `lib/models/` — `detection_result.dart` (PigDetection, DetectionResult)
 - `lib/utils/` — Shared utilities: `camera_metadata.dart` (EXIF + platform channel), `image_preprocessing.dart`, `responsive.dart`
 
 ### Pig Detection Pipeline
 
-`PigDetector` (in `lib/services/pig_detector.dart`) is a singleton that:
-1. Loads ONNX model: `assets/models/rf_detr_pig.onnx` (input: `[1, 3, 432, 432]`)
-2. Preprocesses image: resize to 432x432, normalize with ImageNet stats, NCHW format
-3. Runs inference → outputs: bounding boxes, class logits, segmentation masks
-4. Postprocesses: filter by confidence (0.5), scale to original image coords
-5. Returns `DetectionResult` with list of `PigDetection` (boundingBox, confidence, mask)
+Two-stage pipeline:
+
+**Stage 1 — YOLOv8** (`YoloDetector` in `lib/services/yolo_detector.dart`):
+1. Loads ONNX model: `assets/models/yolov8_pig.onnx`
+2. Runs inference on full image → bounding boxes with confidence
+3. Filters by confidence (0.5), returns `List<PigDetection>` with bounding boxes (no masks)
+
+**Stage 2 — RF-DETR** (`PigDetector` in `lib/services/pig_detector.dart`):
+1. Runs lazily when user taps a pig on `DetailsPage`
+2. Loads ONNX model: `assets/models/rf_detr_pig.onnx` (input: `[1, 3, 432, 432]`)
+3. Crops image to YOLO's bounding box (with 10% padding)
+4. Preprocesses: resize to 432x432, normalize with ImageNet stats, NCHW format
+5. Runs inference → outputs: bounding boxes, class logits, segmentation masks
+6. Postprocesses: filter by confidence (0.5), extracts segmentation mask
+7. Returns `PigDetection` with mask attached
 
 ### Size Calculation & Weight Estimation Pipeline
 
@@ -115,7 +124,7 @@ No external state management library. Pages use minimal `StatefulWidget`. Data i
 
 ## Related Files
 
-- `model.ipynb` (in parent directory `/Users/nine/Desktop/CMKL/2.2/urd/`) — Jupyter notebook with the full Python pipeline (RF-DETR, Depth Pro, PCA measurements, size calculation). The Flutter app replicates this pipeline on-device.
+- `model.ipynb` (in parent directory `/Users/nine/Desktop/CMKL/2.2/urd/`) — Jupyter notebook with the full Python pipeline (YOLO, RF-DETR, Depth Pro, PCA measurements, size calculation). The Flutter app replicates this pipeline on-device.
 
 ## Current Limitations
 

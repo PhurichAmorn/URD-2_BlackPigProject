@@ -12,18 +12,23 @@ This is a **Flutter Android application** (`DooMoo/`) that estimates pig weight 
 ```
 Top-down camera image
         ↓
-[1] pig_classification/    → Breed classification (TFLite)
+[1] YOLOv8                 → Pig detection (bounding boxes) — yolo_detector.dart
         ↓
-[2] pig_segmentation/      → Instance segmentation mask (TFLite)
+[2] RF-DETR                → Instance segmentation mask — pig_detector.dart
         ↓
-[3] transform/             → Perspective correction / homography
+[3] pig_segmentation/      → Segmentation training notebooks
         ↓
-[4] measure_length/        → Pixel-space length & width from mask
+[4] transform/             → Perspective correction / homography
         ↓
-[5] transform_model/       → Regression → predicted weight (kg)
+[5] measure_length/        → Pixel-space length & width from mask
+        ↓
+[6] transform_model/       → Regression → predicted weight (kg)
         ↓
 [DooMoo/]                  → Flutter app — assembles the pipeline
 ```
+
+**Note:** YOLOv8 does initial detection, RF-DETR runs segmentation on each cropped region.
+`pig_classification/` (breed classification) is experimental / not deployed in the app yet.
 
 ### What Is NOT Yet Implemented ❌
 
