@@ -39,7 +39,7 @@ The farmer gets a reliable weight estimate in seconds — using only their phone
 
 - **Fully offline** — works in mountain villages with no internet
 - **Runs on low-end phones** — Helio G85 / Snapdragon 680+, 3–4 GB RAM
-- **Two calibration methods** — laser distance tool or a simple reference object on the ground
+- **Two calibration methods** — external measurement tool (ex. laser meter) or a reference pig estimated length
 - **AI-powered** — computer vision for pig detection + segmentation, ML for weight prediction
 - **Built for farmers** — simple interface, step-by-step guidance, results in Thai language
 
