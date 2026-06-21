@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "Running dart format . ..."
+cd DooMoo
+dart format .
+git add -u
