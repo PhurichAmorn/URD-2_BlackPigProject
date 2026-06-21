@@ -60,7 +60,7 @@ void main() {
           abdominalWidthMm: abdominalWidth,
           hipWidthMm: hipWidth);
 
-      expect(result, '14.0 kg');
+      expect(result, '14.0 กก.');
     });
 
     test('when inputs are not valid then output is dash', () {

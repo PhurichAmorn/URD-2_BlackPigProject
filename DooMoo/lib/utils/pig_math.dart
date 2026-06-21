@@ -1,6 +1,6 @@
 class PigMath {
   /// Average pig body length (snout → tail base) in mm.
-  static const double averagePigLengthMm = 439.0;
+  static const double averagePigLengthMm = 420.0;
 
   /// Average pig chest width in mm.
   static const double averagePigChestMm = 151.0;
@@ -100,6 +100,6 @@ class PigMath {
         0.47990 * (abdominalWidthMm / 10) +
         0.42656 * (hipWidthMm / 10);
     if (weight < 0) return '-';
-    return '${weight.toStringAsFixed(1)} kg';
+    return '${weight.toStringAsFixed(1)} กก.';
   }
 }
