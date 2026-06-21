@@ -25,22 +25,26 @@ class PigInfo extends StatefulWidget {
 }
 
 class _PigInfoState extends State<PigInfo> {
-  final TextEditingController _distanceController = TextEditingController();
-  double? _distanceMm; // stored internally in mm
+  final TextEditingController _heightController = TextEditingController();
+  double? _heightMm; // stored internally in mm
   String? _errorText;
+  bool _isAutoEstimated = false;
+
+  // Toggle for estimation reference - adjustable in debug mode
+  bool _useLengthForEstimation = true;
 
   @override
   void dispose() {
-    _distanceController.dispose();
+    _heightController.dispose();
     super.dispose();
   }
 
-  /// Convert pixel length to real-world mm using camera metadata and distance.
+  /// Convert pixel length to real-world mm using camera metadata and height (distance).
   double? _pixelToMm(double pixelLength) {
     final meta = widget.cameraMetadata;
     return PigMath.pixelToMm(
       pixelLength: pixelLength,
-      distanceMm: _distanceMm,
+      distanceMm: _heightMm,
       focalLength: meta?.focalLength,
       sensorWidth: meta?.sensorWidth,
       sensorHeight: meta?.sensorHeight,
@@ -193,13 +197,13 @@ class _PigInfoState extends State<PigInfo> {
           ),
         ],
         SizedBox(height: ResponsiveUtils.height(context, 2)),
-        // Distance input
-        _buildDistanceInput(context),
+        // Height input
+        _buildHeightInput(context, lengthPx, chestPx),
         SizedBox(height: ResponsiveUtils.height(context, 2)),
         _buildField(
           context,
           'น้ำหนัก: ',
-          _distanceMm != null
+          _heightMm != null
               ? PigMath.estimateWeight(
                   bodyLengthMm: lengthMm,
                   chestWidthMm: chestMm,
@@ -214,7 +218,7 @@ class _PigInfoState extends State<PigInfo> {
           _buildField(
             context,
             'ความยาวลำตัว: ',
-            _distanceMm != null
+            _heightMm != null
                 ? _formatSize(lengthMm)
                 : '${lengthPx.toStringAsFixed(0)} px',
           ),
@@ -222,7 +226,7 @@ class _PigInfoState extends State<PigInfo> {
           _buildField(
             context,
             'รอบอก (Chest): ',
-            _distanceMm != null
+            _heightMm != null
                 ? _formatSize(chestMm)
                 : '${chestPx.toStringAsFixed(0)} px',
           ),
@@ -230,7 +234,7 @@ class _PigInfoState extends State<PigInfo> {
           _buildField(
             context,
             'ความกว้างท้อง (Abdominal): ',
-            _distanceMm != null
+            _heightMm != null
                 ? _formatSize(abdominalMm)
                 : '${abdominalPx.toStringAsFixed(0)} px',
           ),
@@ -238,7 +242,7 @@ class _PigInfoState extends State<PigInfo> {
           _buildField(
             context,
             'ความกว้างสะโพก (Hip): ',
-            _distanceMm != null
+            _heightMm != null
                 ? _formatSize(hipMm)
                 : '${hipPx.toStringAsFixed(0)} px',
           ),
@@ -247,13 +251,14 @@ class _PigInfoState extends State<PigInfo> {
     );
   }
 
-  /// Distance input field
-  Widget _buildDistanceInput(BuildContext context) {
+  /// Height input field
+  Widget _buildHeightInput(
+      BuildContext context, double lengthPx, double chestPx) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'ระยะห่างกล้องถึงหมู (เมตร):',
+          'ความสูงจากกล้องถึงตัวหมู (เมตร):',
           style: TextStyle(
             fontSize: ResponsiveUtils.fontSize(context, 28),
             fontWeight: FontWeight.bold,
@@ -266,7 +271,7 @@ class _PigInfoState extends State<PigInfo> {
           children: [
             Expanded(
               child: TextField(
-                controller: _distanceController,
+                controller: _heightController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   hintText: 'เช่น 0.67',
@@ -298,17 +303,15 @@ class _PigInfoState extends State<PigInfo> {
                 ),
                 onChanged: (_) {
                   if (_errorText != null) {
-                    setState(() {
-                      _errorText = null;
-                    });
+                    setState(() => _errorText = null);
                   }
                 },
-                onSubmitted: (_) => _applyDistance(),
+                onSubmitted: (_) => _applyHeight(),
               ),
             ),
             SizedBox(width: 8),
             ElevatedButton(
-              onPressed: _applyDistance,
+              onPressed: _applyHeight,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF2671F4),
                 foregroundColor: Colors.white,
@@ -326,24 +329,152 @@ class _PigInfoState extends State<PigInfo> {
             ),
           ],
         ),
+
+        // Show choice only in debug mode
+        if (AppConfig.debugMode) ...[
+          SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+          Row(
+            children: [
+              Text(
+                'ใช้ค่าอ้างอิงจาก:',
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.fontSize(context, 24),
+                  color: Color(0xFF5A5A5A),
+                ),
+              ),
+              SizedBox(width: 8),
+              _buildRefChip('ความยาว', true),
+              SizedBox(width: 8),
+              _buildRefChip('รอบอก', false),
+            ],
+          ),
+        ],
+
+        SizedBox(height: ResponsiveUtils.height(context, 1.5)),
+
+        // Auto-estimate button
+        GestureDetector(
+          onTap: () => _autoEstimateHeight(lengthPx, chestPx),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Color(0xFFE8F0FE),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: Color(0xFF2671F4), width: 1),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.straighten, size: 16, color: Color(0xFF2671F4)),
+                SizedBox(width: 8),
+                Text(
+                  'ประมาณความสูง',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.fontSize(context, 24),
+                    color: Color(0xFF2671F4),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_isAutoEstimated)
+          Padding(
+            padding: const EdgeInsets.only(top: 6, left: 4),
+            child: Text(
+              _useLengthForEstimation
+                  ? '* ประเมินจากความยาวเฉลี่ย (${(PigMath.averagePigLengthMm / 10).toStringAsFixed(0)} ซม.)'
+                  : '* ประเมินจากความกว้างอกเฉลี่ย (${(PigMath.averagePigChestMm / 10).toStringAsFixed(1)} ซม.)',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, 22),
+                color: Color(0xFFFF9800),
+              ),
+            ),
+          ),
       ],
     );
   }
 
-  void _applyDistance() {
-    final value = double.tryParse(_distanceController.text);
+  Widget _buildRefChip(String label, bool useLength) {
+    final isSelected = _useLengthForEstimation == useLength;
+    return GestureDetector(
+      onTap: () => setState(() => _useLengthForEstimation = useLength),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: isSelected ? Color(0xFF2671F4) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? Color(0xFF2671F4) : Color(0xFFDDDDDD),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: ResponsiveUtils.fontSize(context, 22),
+            color: isSelected ? Colors.white : Color(0xFF5A5A5A),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _applyHeight() {
+    final value = double.tryParse(_heightController.text);
     if (value != null && value > 0) {
       setState(() {
-        _distanceMm = value * 1000; // convert meters to mm
+        _heightMm = value * 1000;
         _errorText = null;
+        _isAutoEstimated = false;
       });
       FocusScope.of(context).unfocus();
     } else {
       setState(() {
         _errorText = 'ความสูงไม่ถูกต้อง';
-        _distanceMm = null;
+        _heightMm = null;
       });
     }
+  }
+
+  void _autoEstimateHeight(double lengthPx, double chestPx) {
+    final meta = widget.cameraMetadata;
+
+    final pixelSize = _useLengthForEstimation ? lengthPx : chestPx;
+    final realSizeMm = _useLengthForEstimation ? PigMath.averagePigLengthMm : PigMath.averagePigChestMm;
+
+    final distanceMm = PigMath.estimateHeightGeometric(
+      pixelSize: pixelSize,
+      focalLength: meta?.focalLength,
+      sensorWidth: meta?.sensorWidth,
+      sensorHeight: meta?.sensorHeight,
+      imageWidth: meta?.imageWidth,
+      imageHeight: meta?.imageHeight,
+      realSizeMm: realSizeMm,
+    );
+
+    if (distanceMm == null) {
+      setState(() => _errorText = 'ไม่มีข้อมูลกล้อง กรุณาใส่ระยะด้วยตนเอง');
+      return;
+    }
+
+    final distanceM = distanceMm / 1000.0;
+    
+    if (AppConfig.debugMode) {
+      print('--- Height Estimation Debug ---');
+      print('Reference: ${_useLengthForEstimation ? "Length" : "Chest"}');
+      print('Pixel Size: $pixelSize px');
+      print('Real Size: $realSizeMm mm');
+      print('Estimated Height: ${distanceM.toStringAsFixed(6)} m');
+    }
+
+    setState(() {
+      _heightMm = distanceMm;
+      _heightController.text = distanceM.toStringAsFixed(3);
+      _errorText = null;
+      _isAutoEstimated = true;
+    });
+    FocusScope.of(context).unfocus();
   }
 
   /// No detections found
