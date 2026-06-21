@@ -441,7 +441,9 @@ class _PigInfoState extends State<PigInfo> {
     final meta = widget.cameraMetadata;
 
     final pixelSize = _useLengthForEstimation ? lengthPx : chestPx;
-    final realSizeMm = _useLengthForEstimation ? PigMath.averagePigLengthMm : PigMath.averagePigChestMm;
+    final realSizeMm = _useLengthForEstimation
+        ? PigMath.averagePigLengthMm
+        : PigMath.averagePigChestMm;
 
     final distanceMm = PigMath.estimateHeightGeometric(
       pixelSize: pixelSize,
@@ -459,7 +461,7 @@ class _PigInfoState extends State<PigInfo> {
     }
 
     final distanceM = distanceMm / 1000.0;
-    
+
     if (AppConfig.debugMode) {
       print('--- Height Estimation Debug ---');
       print('Reference: ${_useLengthForEstimation ? "Length" : "Chest"}');
