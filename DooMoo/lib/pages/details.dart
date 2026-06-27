@@ -1,5 +1,6 @@
 import 'package:DooMoo/components/DetailsPage/PigInfo.dart';
 import 'package:DooMoo/components/DetailsPage/CameraMetadataInfo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:DooMoo/pages/home.dart';
@@ -200,28 +201,37 @@ class _DetailsPageState extends State<DetailsPage> {
       title: Padding(
         padding: EdgeInsets.only(right: ResponsiveUtils.width(context, 12)),
         child: Center(
-          child: GestureDetector(
-            onLongPress: () {
-              setState(() {
-                AppConfig.debugMode = !AppConfig.debugMode;
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                      'Debug Mode: ${AppConfig.debugMode ? "Enabled" : "Disabled"}'),
-                  duration: const Duration(seconds: 1),
+          child: kDebugMode
+              ? GestureDetector(
+                  onLongPress: () {
+                    setState(() {
+                      AppConfig.debugMode = !AppConfig.debugMode;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Debug Mode: ${AppConfig.debugMode ? "Enabled" : "Disabled"}'),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'รายละเอียด',
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.fontSize(context, 43),
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF000000),
+                    ),
+                  ),
+                )
+              : Text(
+                  'รายละเอียด',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.fontSize(context, 43),
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF000000),
+                  ),
                 ),
-              );
-            },
-            child: Text(
-              'รายละเอียด',
-              style: TextStyle(
-                fontSize: ResponsiveUtils.fontSize(context, 43),
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF000000),
-              ),
-            ),
-          ),
         ),
       ),
       leading: GestureDetector(

@@ -213,6 +213,15 @@ class _PigInfoState extends State<PigInfo> {
               : '-',
           fontWeight: FontWeight.bold,
         ),
+        SizedBox(height: 4),
+        Text(
+          '* ผลการวัดเป็นเพียงค่าประมาณ น้ำหนักจริงของหมูอาจแตกต่างจากค่าที่แสดง',
+          style: TextStyle(
+            fontSize: ResponsiveUtils.fontSize(context, 22),
+            color: Color(0xFFE53935),
+            fontStyle: FontStyle.italic,
+          ),
+        ),
         if (AppConfig.debugMode) ...[
           SizedBox(height: ResponsiveUtils.height(context, 1.5)),
           _buildField(
@@ -352,33 +361,34 @@ class _PigInfoState extends State<PigInfo> {
 
         SizedBox(height: ResponsiveUtils.height(context, 1.5)),
 
-        // Auto-estimate button
-        GestureDetector(
-          onTap: () => _autoEstimateHeight(lengthPx, chestPx),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Color(0xFFE8F0FE),
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: Color(0xFF2671F4), width: 1),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.straighten, size: 16, color: Color(0xFF2671F4)),
-                SizedBox(width: 8),
-                Text(
-                  'ประมาณความสูง',
-                  style: TextStyle(
-                    fontSize: ResponsiveUtils.fontSize(context, 24),
-                    color: Color(0xFF2671F4),
-                    fontWeight: FontWeight.w500,
+        if (AppConfig.debugMode)
+          // Auto-estimate button
+          GestureDetector(
+            onTap: () => _autoEstimateHeight(lengthPx, chestPx),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Color(0xFFE8F0FE),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Color(0xFF2671F4), width: 1),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.straighten, size: 16, color: Color(0xFF2671F4)),
+                  SizedBox(width: 8),
+                  Text(
+                    'ประมาณความสูง',
+                    style: TextStyle(
+                      fontSize: ResponsiveUtils.fontSize(context, 24),
+                      color: Color(0xFF2671F4),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
         if (_isAutoEstimated)
           Padding(
             padding: const EdgeInsets.only(top: 6, left: 4),

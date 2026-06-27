@@ -43,13 +43,16 @@ class _CameraState extends State<CameraPage> {
         _processingStatus = 'กำลังตรวจหาหมู...';
       });
 
-      // 1. Extract camera metadata
-      final metadata =
-          await CameraMetadataExtractor.extractFromImage(xfile.path);
-
-      // 2. Run YOLOv8 for initial object detection
-      final yolo = await YoloDetector.getInstance();
-      final detections = await yolo.detect(xfile.path);
+      // Run metadata extraction and YOLO detection in parallel
+      final results = await Future.wait([
+        CameraMetadataExtractor.extractFromImage(xfile.path),
+        (() async {
+          final yolo = await YoloDetector.getInstance();
+          return await yolo.detect(xfile.path);
+        })(),
+      ]);
+      final metadata = results[0] as CameraMetadata;
+      final detections = results[1] as List<PigDetection>;
 
       if (detections.isEmpty) {
         setState(() {
@@ -93,9 +96,9 @@ class _CameraState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),

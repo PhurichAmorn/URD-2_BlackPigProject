@@ -105,6 +105,7 @@ class PigMath {
     //     0 * (abdominalWidthMm / 10) +
     //     0.33413 * (hipWidthMm / 10);
     if (weight < 0) return '-';
-    return '${weight.toStringAsFixed(1)} กก.';
+    final clamped = weight.clamp(5.0, 30.0);
+    return '${clamped.toStringAsFixed(1)} กก.';
   }
 }
