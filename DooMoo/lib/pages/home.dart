@@ -31,7 +31,8 @@ class _HomePageState extends State<HomePage> {
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: ResponsiveUtils.responsivePadding(context, horizontal: 31),
+                padding:
+                    ResponsiveUtils.responsivePadding(context, horizontal: 31),
                 child: Column(
                   children: [
                     SizedBox(height: ResponsiveUtils.height(context, 7)),
