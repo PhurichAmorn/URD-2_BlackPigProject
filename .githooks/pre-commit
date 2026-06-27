@@ -1,5 +1,9 @@
 #!/bin/sh
-echo "Running dart format . ..."
+set -e
+cd "$(git rev-parse --show-toplevel)"
 cd DooMoo
+
+echo "Running dart format ..."
 dart format .
+
 git add -u
