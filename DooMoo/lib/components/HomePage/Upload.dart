@@ -185,7 +185,7 @@ class _UploadState extends State<Upload> {
     return Padding(
       padding: EdgeInsets.only(top: 3),
       child: Text(
-        'อัพโหลดรูปหมู',
+        'อัปโหลดรูปหมู',
         style: TextStyle(
           fontSize: ResponsiveUtils.fontSize(context, 34),
           fontWeight: FontWeight.bold,
