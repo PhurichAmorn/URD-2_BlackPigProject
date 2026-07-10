@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:DooMoo/utils/responsive.dart';
 import 'package:DooMoo/models/detection_result.dart';
 import 'package:DooMoo/utils/camera_metadata.dart';
@@ -282,8 +283,11 @@ class _PigInfoState extends State<PigInfo> {
               child: TextField(
                 controller: _heightController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$'))
+                ],
                 decoration: InputDecoration(
-                  hintText: 'เช่น 0.67',
+                  hintText: 'เช่น 1.23',
                   hintStyle: TextStyle(
                     fontSize: ResponsiveUtils.fontSize(context, 26),
                     color: Color(0xFFBBBBBB),
